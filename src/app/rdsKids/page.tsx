@@ -244,8 +244,10 @@ totalLessons:60
             className="w-full h-[120px] object-cover rounded-xl opacity-20 fade-all-edges"
             priority
           />
-          <div className="absolute inset-0 flex items-center justify-center px-6 text-center">
-            <div className="grid grid-cols-2 justify-center-safe items-center gap-4">
+          
+            <div className="absolute inset-0 flex items-center justify-center px-6 text-center">
+
+              {/* LOGO - SIEMPRE VISIBLE */}
               <div className="ml-60 mt-[-50px] top-[-10px] left-1/2 transform -translate-x-1/2 w-[200px] sm:w-[250px] h-auto">
                 <div className="relative z-10">
                   <LogoOficialSigla color2={color2} color3={color3} />
@@ -259,16 +261,21 @@ totalLessons:60
                   priority
                 />
               </div>
-              <div>
-                <h2 className="text-white font-bold text-2xl md:text-3xl mb-2">
-                  ¡Bienvenido a tu mundo, donde tu imaginación se hace código!
-                </h2>
-                <p className="text-blue-200 text-lg">
-                  Cada paso cuenta. Cada código enseña.
-                </p>
+
+              {/* TEXTO - SOLO DESKTOP */}
+              <div className="hidden md:flex items-center justify-center">
+                <div className="ml-10">
+                  <h2 className="text-white font-bold text-2xl md:text-3xl mb-2">
+                    ¡Bienvenido a tu mundo, donde tu imaginación se hace código!
+                  </h2>
+                  <p className="text-blue-200 text-lg">
+                    Cada paso cuenta. Cada código enseña.
+                  </p>
+                </div>
               </div>
+
             </div>
-          </div>
+          
         </div>
 
         
