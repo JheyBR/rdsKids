@@ -1,0 +1,244 @@
+{
+  "courses": [
+    {
+      "curso": "Roblox",
+      "niveles": [
+        {
+          "nivel": 1,
+          "clases": [
+            "Introducción a Roblox Studio",
+            "Interfaz y Herramientas",
+            "Creando tu Primer Objeto",
+            "Materiales y Texturas",
+            "Iluminación Básica",
+            "Scripting con Lua",
+            "Variables y Funciones",
+            "Eventos y Triggers",
+            "Personaje Básico",
+            "Movimiento con WASD",
+            "Interacción con Objetos",
+            "Sistema de Salud",
+            "Interfaz de Usuario",
+            "Sistema de Puntuación",
+            "Menús y Botones",
+            "Sonidos y Efectos",
+            "Partículas Básicas",
+            "Optimización",
+            "Testing y Debug",
+            "Publicación Final"
+          ]
+        },
+        {
+          "nivel": 2,
+          "clases": [
+            "Mapas avanzados",
+            "Scripting modular",
+            "Sistemas de inventario",
+            "Sistema de misiones",
+            "NPC interactivos",
+            "Sistemas de economía",
+            "Guardado de datos",
+            "Multiplayer básico",
+            "Eventos del juego",
+            "Sistemas de checkpoints",
+            "Vehículos",
+            "Herramientas interactivas",
+            "Sistema de tiendas",
+            "Leaderboard",
+            "Interfaces avanzadas",
+            "Efectos visuales",
+            "Optimización intermedia",
+            "Testing multiplayer",
+            "Debug avanzado",
+            "Mini juego completo"
+          ]
+        },
+        {
+          "nivel": 3,
+          "clases": [
+            "Arquitectura de juegos",
+            "Programación avanzada en Lua",
+            "Sistemas complejos",
+            "IA básica para NPC",
+            "Sistemas de combate",
+            "Economía avanzada",
+            "Sistemas de progreso",
+            "Inventario avanzado",
+            "Multiplayer avanzado",
+            "Networking",
+            "Optimización profesional",
+            "Gestión de memoria",
+            "Eventos dinámicos",
+            "Sistemas de logros",
+            "Interfaces profesionales",
+            "Efectos avanzados",
+            "Testing completo",
+            "Debug profesional",
+            "Preparación para publicación",
+            "Publicar juego en Roblox"
+          ]
+        }
+      ]
+    },
+    {
+      "curso": "Scratch",
+      "niveles": [
+        {
+          "nivel": 1,
+          "clases": [
+            "Conociendo Scratch",
+            "Bloques de Movimiento",
+            "Disfraces y Apariencia",
+            "Sonidos y Música",
+            "Eventos y Control",
+            "Variables Básicas",
+            "Condicionales Si/No",
+            "Bucles y Repetición",
+            "Creando un Personaje",
+            "Animación Básica",
+            "Interacción entre Sprites",
+            "Juego de Preguntas",
+            "Laberinto Interactivo",
+            "Sistema de Vidas",
+            "Contador de Puntos",
+            "Efectos Especiales",
+            "Historias Interactivas",
+            "Mini Juego Completo",
+            "Compartir Proyecto",
+            "Reto Final"
+          ]
+        },
+        {
+          "nivel": 2,
+          "clases": [
+            "Repaso Scratch",
+            "Diseño de juegos",
+            "Variables avanzadas",
+            "Sistema de niveles",
+            "IA básica",
+            "Plataformas",
+            "Colisiones avanzadas",
+            "Sistema de enemigos",
+            "Sistema de puntuación avanzado",
+            "Vidas múltiples",
+            "Animaciones avanzadas",
+            "Efectos visuales",
+            "Sistema de inventario",
+            "Historias interactivas",
+            "Mini RPG",
+            "Juego de carreras",
+            "Juego tipo shooter",
+            "Optimización",
+            "Compartir proyecto online",
+            "Proyecto final Scratch"
+          ]
+        },
+        {
+          "nivel": 3,
+          "clases": [
+            "Arquitectura de proyectos",
+            "Diseño profesional de juegos",
+            "Sistemas complejos",
+            "IA avanzada",
+            "Mecánicas de juego",
+            "Sistema de progresión",
+            "Interfaces avanzadas",
+            "Multinivel",
+            "Juego tipo RPG",
+            "Juego tipo plataforma",
+            "Juego tipo puzzle",
+            "Juego educativo",
+            "Optimización",
+            "Debugging",
+            "Testing",
+            "Preparación de proyecto",
+            "Publicación",
+            "Feedback de usuarios",
+            "Mejoras finales",
+            "Proyecto final Scratch Pro"
+          ]
+        }
+      ]
+    },
+    {
+      "curso": "Python",
+      "niveles": [
+        {
+          "nivel": 1,
+          "clases": [
+            "¿Qué es programar?",
+            "Variables y tipos de datos",
+            "Entrada de datos",
+            "Operaciones matemáticas",
+            "Condicionales",
+            "Bucles while",
+            "Bucles for",
+            "Funciones",
+            "Mini proyecto consola",
+            "Introducción a Pygame",
+            "Crear ventana",
+            "Dibujar en pantalla",
+            "Movimiento de objetos",
+            "Control con teclado",
+            "Colisiones",
+            "Sistema de puntuación",
+            "Sistema de vidas",
+            "Sprites e imágenes",
+            "Mini juego completo",
+            "Presentación del juego"
+          ]
+        },
+        {
+          "nivel": 2,
+          "clases": [
+            "Repaso Python",
+            "Listas",
+            "Diccionarios",
+            "Funciones avanzadas",
+            "Módulos",
+            "Archivos",
+            "Introducción Pygame avanzada",
+            "Sprites avanzados",
+            "Animaciones",
+            "Sistema de enemigos",
+            "IA básica",
+            "Sistema de niveles",
+            "Sistema de guardado",
+            "Interfaces de juego",
+            "Efectos de sonido",
+            "Optimización",
+            "Debugging",
+            "Testing",
+            "Juego completo avanzado",
+            "Presentación del juego"
+          ]
+        },
+        {
+          "nivel": 3,
+          "clases": [
+            "Arquitectura de juegos",
+            "Programación orientada a objetos",
+            "Clases y objetos",
+            "Herencia",
+            "Patrones de diseño",
+            "Motor de juego básico",
+            "IA avanzada",
+            "Sistema de físicas",
+            "Sistema de inventario",
+            "Networking básico",
+            "Optimización avanzada",
+            "Gestión de memoria",
+            "Debugging profesional",
+            "Testing automatizado",
+            "Publicación del juego",
+            "Distribución",
+            "Marketing del juego",
+            "Feedback de usuarios",
+            "Mejoras finales",
+            "Proyecto final Python"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -25,7 +25,11 @@ import {
   Shield,
   Heart,
   Music,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Upload,
+  X,
+  File,
+  Check
 } from 'lucide-react';
 import { useRouter } from "next/navigation";
 
@@ -47,10 +51,150 @@ interface LevelPageProps {
   levelName: string;
 }
 
+// Modal component for file upload
+const UploadModal = ({ isOpen, onClose, classItem, onUpload }: { 
+  isOpen: boolean; 
+  onClose: () => void; 
+  classItem: ClassItem | null;
+  onUpload: (file: File) => void;
+}) => {
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const [uploaded, setUploaded] = useState(false);
+
+  if (!isOpen || !classItem) return null;
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setSelectedFile(e.target.files[0]);
+    }
+  };
+
+  const handleUpload = () => {
+    if (selectedFile) {
+      setUploading(true);
+      // Simular carga de archivo
+      setTimeout(() => {
+        setUploading(false);
+        setUploaded(true);
+        onUpload(selectedFile);
+        // Cerrar modal después de 1.5 segundos
+        setTimeout(() => {
+          onClose();
+          setSelectedFile(null);
+          setUploaded(false);
+        }, 1500);
+      }, 2000);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+      <div className="relative w-full max-w-md rounded-2xl bg-white dark:bg-[#1a1a2a] border border-blue-500/40 shadow-2xl">
+        {/* Header */}
+        <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+          <h3 className="text-xl font-bold">Subir Tarea</h3>
+          <button 
+            onClick={onClose}
+            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Content */}
+        <div className="p-6">
+          <div className="mb-4">
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Clase:</p>
+            <p className="font-semibold">{classItem.title}</p>
+          </div>
+
+          {!uploaded ? (
+            <>
+              {/* File Upload Area */}
+              <div className="mb-6">
+                <label 
+                  htmlFor="file-upload"
+                  className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-blue-500/30 rounded-lg cursor-pointer hover:border-blue-500/50 transition group"
+                >
+                  <Upload className="w-8 h-8 text-blue-500 mb-2 group-hover:scale-110 transition" />
+                  <span className="text-sm font-medium text-blue-600 dark:text-blue-400">
+                    {selectedFile ? selectedFile.name : 'Seleccionar archivo'}
+                  </span>
+                  <span className="text-xs text-gray-500 mt-1">
+                    PDF, imagen o .zip (max 10MB)
+                  </span>
+                  <input 
+                    id="file-upload"
+                    type="file" 
+                    className="hidden" 
+                    onChange={handleFileSelect}
+                    accept=".pdf,.jpg,.jpeg,.png,.zip"
+                  />
+                </label>
+              </div>
+
+              {/* Selected File Info */}
+              {selectedFile && (
+                <div className="mb-6 p-3 rounded-lg bg-blue-500/5 border border-blue-500/20">
+                  <div className="flex items-center gap-3">
+                    <File className="w-5 h-5 text-blue-500" />
+                    <div className="flex-1">
+                      <p className="text-sm font-medium truncate">{selectedFile.name}</p>
+                      <p className="text-xs text-gray-500">
+                        {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Action Buttons */}
+              <div className="flex gap-3">
+                <button
+                  onClick={onClose}
+                  className="flex-1 py-2 border border-gray-300 dark:border-gray-600 rounded-lg font-medium hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={handleUpload}
+                  disabled={!selectedFile || uploading}
+                  className={`flex-1 py-2 rounded-lg font-medium transition ${
+                    !selectedFile || uploading
+                      ? 'bg-gray-300 dark:bg-gray-700 text-gray-500 cursor-not-allowed'
+                      : 'bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:opacity-90'
+                  }`}
+                >
+                  {uploading ? 'Subiendo...' : 'Enviar'}
+                </button>
+              </div>
+            </>
+          ) : (
+            // Success Message
+            <div className="text-center py-8">
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-green-500/10 flex items-center justify-center">
+                <Check className="w-8 h-8 text-green-500" />
+              </div>
+              <h4 className="text-lg font-bold mb-2">¡Tarea enviada!</h4>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Tu archivo ha sido subido correctamente
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const LevelPage = ({ course, level, levelName }: LevelPageProps) => {
   const { theme } = useTheme();
   const router = useRouter();
   const [activeClass, setActiveClass] = useState<number>(1);
+  const [uploadModalOpen, setUploadModalOpen] = useState(false);
+  const [selectedClassForUpload, setSelectedClassForUpload] = useState<ClassItem | null>(null);
+  const [uploadedFiles, setUploadedFiles] = useState<Record<number, boolean>>({});
   
   const courseInfo = {
     roblox: {
@@ -71,7 +215,7 @@ const LevelPage = ({ course, level, levelName }: LevelPageProps) => {
       title: "Python + Pygame",
       icon: Rocket,
       color: "from-yellow-500 to-orange-600",
-      totalLevels: 4,
+      totalLevels: 3,
       description: "Programación con Python y creación de juegos"
     }
   };
@@ -84,12 +228,12 @@ const LevelPage = ({ course, level, levelName }: LevelPageProps) => {
     id: i + 1,
     title: `Clase ${i + 1}: ${getClassTitle(course, level, i + 1)}`,
     description: getClassDescription(course, level, i + 1),
-    duration: "60 min", // Todas las clases de Pygame son de 60 minutos
+    duration: "60 min",
     type: getClassType(course, i + 1),
     status: getClassStatus(i + 1),
     points: calculatePoints(course, i + 1),
-    resources: getResourcesForClass(course, i + 1),
-    projectUrl: i === 19 ? `/projects/${course}/final` : undefined // Clase 20 es proyecto final
+    resources: ['Taller'],
+    projectUrl: i === 19 ? `/projects/${course}/final` : undefined
   }));
 
   function getClassTitle(course: string, level: number, classNum: number): string {
@@ -140,33 +284,26 @@ const LevelPage = ({ course, level, levelName }: LevelPageProps) => {
     ];
 
     const pygameTitles = [
-      // FASE 1 – Fundamentos de Python (Clases 1–5)
-      "¿Qué es programar? - Introducción a Python",
-      "Entrada de datos y matemáticas",
-      "Condicionales - Tomando decisiones",
-      "Bucles - Repetir acciones",
-      "Funciones - Creando nuestros propios comandos",
-      
-      // FASE 2 – Introducción a Pygame (Clases 6–10)
-      "Primera ventana con Pygame",
+      "¿Qué es programar?",
+      "Variables y tipos de datos",
+      "Entrada de datos",
+      "Operaciones matemáticas",
+      "Condicionales",
+      "Bucles while",
+      "Bucles for",
+      "Funciones",
+      "Mini proyecto consola",
+      "Introducción a Pygame",
+      "Crear ventana",
       "Dibujar en pantalla",
       "Movimiento de objetos",
-      "Control por teclado",
-      "Detección de colisiones",
-      
-      // FASE 3 – Construcción del Juego (Clases 11–17)
-      "Estructura del juego",
-      "Velocidad y dificultad",
+      "Control con teclado",
+      "Colisiones",
       "Sistema de puntuación",
       "Sistema de vidas",
-      "Efectos de sonido",
       "Sprites e imágenes",
-      "Pantalla de inicio y reinicio",
-      
-      // FASE 4 – Proyecto Final (Clases 18–20)
-      "Diseño del juego en papel",
-      "Desarrollo del juego",
-      "🎮 Feria tecnológica - Presentación final"
+      "Mini juego completo",
+      "Presentación del juego"
     ];
 
     const titles = course === 'roblox' ? robloxTitles : course === 'scratch' ? scratchTitles : pygameTitles;
@@ -220,33 +357,26 @@ const LevelPage = ({ course, level, levelName }: LevelPageProps) => {
         "Proyecto final integrador"
       ],
       pygame: [
-        // FASE 1
-        "Entiende qué es programar con actividades divertidas de robot y tu primer código en Python",
-        "Aprende a pedir datos al usuario y hacer cálculos matemáticos como una calculadora gamer",
-        "Descubre cómo tomar decisiones con condicionales y crea un juego de adivinar números",
-        "Domina los bucles para repetir acciones y crear contadores para niveles",
-        "Crea tus propias funciones para tener poderes especiales en tu juego",
-        
-        // FASE 2
-        "Crea tu primera ventana de juego con Pygame y entiende el bucle principal del juego",
-        "Aprende a dibujar formas, usar colores y coordenadas para crear tu personaje",
-        "Haz que los objetos cobren vida y se muevan por la pantalla",
-        "Controla tu personaje con las teclas del teclado",
-        "Detecta cuando los objetos chocan y crea un juego de recoger monedas",
-        
-        // FASE 3
-        "Organiza tu código con la estructura profesional de juegos",
-        "Ajusta la velocidad del juego y crea niveles de dificultad",
-        "Implementa un sistema de puntuación que cuenta tus logros",
-        "Añade vidas a tu personaje para hacer el juego más emocionante",
-        "Incorpora música y efectos de sonido a tu juego",
-        "Trabaja con imágenes y sprites para darle vida a tu juego",
-        "Crea una pantalla de inicio y permite reiniciar el juego",
-        
-        // FASE 4
-        "Diseña tu propio juego en papel: personajes, reglas y mecánicas",
-        "Programa tu juego completo aplicando todo lo aprendido",
-        "Presenta tu creación en la feria tecnológica y comparte con amigos"
+        "Entiende qué es programar con actividades divertidas",
+        "Aprende a usar variables para guardar información",
+        "Pide datos al usuario con input()",
+        "Realiza operaciones matemáticas básicas",
+        "Toma decisiones con if/else",
+        "Repite acciones con bucles while",
+        "Repite acciones con bucles for",
+        "Crea tus propias funciones",
+        "Crea un programa de consola interactivo",
+        "Instala Pygame y crea tu primera ventana",
+        "Dibuja formas y usa colores",
+        "Mueve objetos por la pantalla",
+        "Controla objetos con el teclado",
+        "Detecta cuando los objetos chocan",
+        "Crea un sistema de puntuación",
+        "Añade vidas a tu personaje",
+        "Trabaja con imágenes y sprites",
+        "Añade efectos de sonido",
+        "Desarrolla un juego completo",
+        "Presenta tu juego y compártelo"
       ]
     };
 
@@ -255,20 +385,12 @@ const LevelPage = ({ course, level, levelName }: LevelPageProps) => {
   }
 
   function getClassType(course: string, classNum: number): 'video' | 'taller' | 'proyecto' {
-    if (course === 'pygame') {
-      if (classNum === 20) return 'proyecto'; // Feria tecnológica
-      if (classNum % 5 === 0 || classNum === 17) return 'taller'; // Mini retos y proyectos
-      return 'video';
-    }
-    
-    // Comportamiento original para otros cursos
     if (classNum % 5 === 0) return 'proyecto';
     if (classNum % 2 === 0) return 'taller';
     return 'video';
   }
 
   function getClassStatus(classNum: number): 'completed' | 'current' | 'locked' {
-    // Ejemplo: el estudiante ha completado 8 clases
     const completedClasses = 8;
     
     if (classNum <= completedClasses) return 'completed';
@@ -277,55 +399,43 @@ const LevelPage = ({ course, level, levelName }: LevelPageProps) => {
   }
 
   function calculatePoints(course: string, classNum: number): number {
-    if (course === 'pygame') {
-      if (classNum === 20) return 100; // Proyecto final
-      if (classNum % 5 === 0) return 40; // Talleres importantes
-      return 25; // Clases regulares
-    }
-    
-    // Puntos originales para otros cursos
     if (classNum % 5 === 0) return 50;
     if (classNum % 2 === 0) return 30;
     return 20;
   }
 
-  function getResourcesForClass(course: string, classNum: number): string[] {
-    if (course === 'pygame') {
-      const resources = ['Video', 'Código ejemplo'];
-      
-      // Añadir recursos específicos según la clase
-      if (classNum <= 5) {
-        resources.push('Ejercicios Python');
-      } else if (classNum <= 10) {
-        resources.push('Plantilla Pygame');
-      } else if (classNum <= 17) {
-        resources.push('Assets del juego');
-      } else {
-        resources.push('Guía del proyecto');
-      }
-      
-      return resources;
+  const handleUploadClick = (classItem: ClassItem) => {
+    setSelectedClassForUpload(classItem);
+    setUploadModalOpen(true);
+  };
+
+  const handleFileUpload = (file: File) => {
+    if (selectedClassForUpload) {
+      setUploadedFiles(prev => ({
+        ...prev,
+        [selectedClassForUpload.id]: true
+      }));
+      console.log(`Archivo subido para clase ${selectedClassForUpload.id}:`, file.name);
     }
-    
-    return ['Archivo', 'Presentación  '];
-  }
+  };
 
   const completedClasses = classes.filter(c => c.status === 'completed').length;
   const totalPoints = classes.reduce((sum, c) => c.status === 'completed' ? sum + c.points : sum, 0);
   const progressPercentage = (completedClasses / 20) * 100;
 
-  // Función para obtener el nombre de la fase según el curso
-  const getPhaseName = (course: string, classNum: number): string => {
-    if (course !== 'pygame') return '';
-    
-    if (classNum <= 5) return 'Fase 1: Fundamentos de Python';
-    if (classNum <= 10) return 'Fase 2: Introducción a Pygame';
-    if (classNum <= 17) return 'Fase 3: Construcción del Juego';
-    return 'Fase 4: Proyecto Final';
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-[#0a0a1a] py-8">
+      {/* Upload Modal */}
+      <UploadModal 
+        isOpen={uploadModalOpen}
+        onClose={() => {
+          setUploadModalOpen(false);
+          setSelectedClassForUpload(null);
+        }}
+        classItem={selectedClassForUpload}
+        onUpload={handleFileUpload}
+      />
+
       <div className="container max-w-7xl mx-auto px-6">
         
         {/* Header Navigation */}
@@ -349,18 +459,31 @@ const LevelPage = ({ course, level, levelName }: LevelPageProps) => {
                     {currentCourse.title} - {levelName}
                   </h1>
                   <p className="text-gray-600 dark:text-gray-300">
-                    {course === 'pygame' ? '4 fases • 20 clases • 60 min cada una' : `Nivel ${level} de ${currentCourse.totalLevels} • 20 clases`}
+                    Nivel {level} de {currentCourse.totalLevels} • 20 clases
                   </p>
-                  {course === 'pygame' && (
-                    <p className="text-sm text-yellow-600 dark:text-yellow-400 mt-1">
-                      {currentCourse.description}
-                    </p>
-                  )}
                 </div>
               </div>
             </div>
             
-            
+            {/* Progress Stats */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="text-center p-4 rounded-xl border border-blue-500/20 bg-white/80 dark:bg-[#181a2a]/80">
+                <p className="text-2xl font-bold">{completedClasses}/20</p>
+                <p className="text-sm text-gray-500">Clases</p>
+              </div>
+              <div className="text-center p-4 rounded-xl border border-blue-500/20 bg-white/80 dark:bg-[#181a2a]/80">
+                <p className="text-2xl font-bold">{totalPoints}</p>
+                <p className="text-sm text-gray-500">Puntos</p>
+              </div>
+              <div className="text-center p-4 rounded-xl border border-blue-500/20 bg-white/80 dark:bg-[#181a2a]/80">
+                <p className="text-2xl font-bold">{Math.round(progressPercentage)}%</p>
+                <p className="text-sm text-gray-500">Progreso</p>
+              </div>
+              <div className="text-center p-4 rounded-xl border border-blue-500/20 bg-white/80 dark:bg-[#181a2a]/80">
+                <p className="text-2xl font-bold">{20 - completedClasses}</p>
+                <p className="text-sm text-gray-500">Restantes</p>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -379,7 +502,7 @@ const LevelPage = ({ course, level, levelName }: LevelPageProps) => {
         </div>
 
         {/* Class Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-1  gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-1 gap-8">
           
           {/* Class List */}
           <div className="lg:col-span-2">
@@ -388,26 +511,8 @@ const LevelPage = ({ course, level, levelName }: LevelPageProps) => {
                 <BookOpen className="w-6 h-6" />
                 Lista de Clases
               </h2>
-              {course === 'pygame' && (
-                <div className="flex gap-2 mb-4 flex-wrap">
-                  <span className="px-3 py-1 rounded-full bg-yellow-500/10 text-yellow-600 dark:text-yellow-400 text-sm">
-                    🐍 Fase 1: Python
-                  </span>
-                  <span className="px-3 py-1 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 text-sm">
-                    🎮 Fase 2: Pygame
-                  </span>
-                  <span className="px-3 py-1 rounded-full bg-purple-500/10 text-purple-600 dark:text-purple-400 text-sm">
-                    ⚙️ Fase 3: Desarrollo
-                  </span>
-                  <span className="px-3 py-1 rounded-full bg-green-500/10 text-green-600 dark:text-green-400 text-sm">
-                    🏆 Fase 4: Proyecto
-                  </span>
-                </div>
-              )}
               <p className="text-gray-600 dark:text-gray-300 mb-6">
-                {course === 'pygame' 
-                  ? 'Aprende Python desde cero y crea tus propios videojuegos con Pygame. ¡20 clases para convertirte en desarrollador de juegos!'
-                  : 'Completa las 20 clases en orden para desbloquear el siguiente nivel.'}
+                Completa las 20 clases en orden para desbloquear el siguiente nivel.
               </p>
             </div>
 
@@ -456,11 +561,6 @@ const LevelPage = ({ course, level, levelName }: LevelPageProps) => {
                       <div className="flex flex-col md:flex-row md:items-center justify-between mb-3">
                         <div>
                           <h3 className="text-xl font-bold mb-2">{classItem.title}</h3>
-                          {course === 'pygame' && (
-                            <span className="inline-block text-xs px-2 py-1 rounded bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 mb-2">
-                              {getPhaseName(course, classItem.id)}
-                            </span>
-                          )}
                           <p className="text-gray-600 dark:text-gray-300">
                             {classItem.description}
                           </p>
@@ -492,8 +592,7 @@ const LevelPage = ({ course, level, levelName }: LevelPageProps) => {
                           {classItem.type === 'video' && <Video className="w-4 h-4" />}
                           {classItem.type === 'taller' && <FileText className="w-4 h-4" />}
                           {classItem.type === 'proyecto' && <Target className="w-4 h-4" />}
-                          {classItem.type === 'taller' ? 'Taller práctico' : 'Proyecto'}
-                           
+                          {classItem.type.charAt(0).toUpperCase() + classItem.type.slice(1)}
                         </span>
 
                         {classItem.status === 'completed' && (
@@ -519,7 +618,7 @@ const LevelPage = ({ course, level, levelName }: LevelPageProps) => {
                                 className="inline-flex items-center gap-2 px-3 py-1.5 text-sm rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 hover:bg-blue-500/20 transition"
                               >
                                 <Download className="w-4 h-4" />
-                                Proyecto Final
+                                Proyecto
                               </a>
                             )}
                           </div>
@@ -528,10 +627,11 @@ const LevelPage = ({ course, level, levelName }: LevelPageProps) => {
                     </div>
                   </div>
 
-                  {/* Action Button */}
+                  {/* Action Buttons */}
                   <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                    {/* Main Action Button */}
                     <button
-                      className={`w-full py-3 rounded-lg font-medium transition-all ${
+                      className={`w-full py-3 rounded-lg font-medium transition-all mb-3 ${
                         classItem.status === 'completed'
                           ? 'bg-green-500/10 text-green-600 dark:text-green-400 hover:bg-green-500/20'
                           : classItem.status === 'current'
@@ -544,26 +644,51 @@ const LevelPage = ({ course, level, levelName }: LevelPageProps) => {
                       {classItem.status === 'current' && 'Comenzar clase'}
                       {classItem.status === 'locked' && 'Bloqueado'}
                     </button>
+
+                    {/* Upload Button - Only for unlocked classes */}
+                    {classItem.status !== 'locked' && (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleUploadClick(classItem);
+                        }}
+                        className={`w-full py-2 rounded-lg font-medium transition-all flex items-center justify-center gap-2 ${
+                          uploadedFiles[classItem.id]
+                            ? 'bg-green-500/10 text-green-600 dark:text-green-400 border border-green-500/30'
+                            : 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/30 hover:bg-blue-500/20'
+                        }`}
+                      >
+                        <Upload className="w-4 h-4" />
+                        {uploadedFiles[classItem.id] ? 'Tarea subida ✓' : 'Subir tarea'}
+                      </button>
+                    )}
                   </div>
                 </div>
               ))}
             </div>
           </div>
-
         </div>
 
         {/* Navigation */}
         <div className="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
           <div className="flex justify-between">
-            {course !== 'pygame' && level > 1 && (
-              <button className="flex items-center gap-2 px-6 py-3 rounded-lg border border-blue-500/20 hover:bg-blue-500/10 transition">
+            {level > 1 && (
+              <button 
+                onClick={() => router.push(`/${course}/level-${level - 1}`)}
+                className="flex items-center gap-2 px-6 py-3 rounded-lg border border-blue-500/20 hover:bg-blue-500/10 transition"
+              >
                 <ChevronLeft className="w-5 h-5" />
                 Nivel {level - 1}
               </button>
             )}
             
-            {course !== 'pygame' && level < currentCourse.totalLevels && (
+            {level < currentCourse.totalLevels && (
               <button 
+                onClick={() => {
+                  if (completedClasses >= 20 && totalPoints >= 600) {
+                    router.push(`/${course}/level-${level + 1}`);
+                  }
+                }}
                 className={`flex items-center gap-2 px-6 py-3 rounded-lg font-medium ${
                   completedClasses >= 20 && totalPoints >= 600
                     ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:opacity-90'

@@ -10,6 +10,7 @@ import LogoOficialSigla from "@/components/Componentes/LogoOficialSigla";
 import {
   Gamepad2,
   Code,
+  Rocket,
   BookOpen,
   CheckCircle,
   Upload,
@@ -34,13 +35,13 @@ const RDSKidsEducation = () => {
   const [mounted, setMounted] = useState(false);
   const { theme } = useTheme();
   
-   // Obtener datos del usuario del localStorage
+  // Obtener datos del usuario del localStorage
   const [studentData, setStudentData] = useState({
     name: "Ana López",
     role: "Estudiante",
     progress: 65,
     level: "Sexto B",
-    totalClasses: 2,
+    totalClasses: 3, // Cambiado a 3 porque ahora hay 3 cursos
     completedLevels: 2
   });
 
@@ -57,123 +58,116 @@ const RDSKidsEducation = () => {
     }
   }, []);
 
-
-  
-  // Función de logout CORREGIDA
+  // Función de logout
   const handleLogout = () => {
     localStorage.removeItem("isAuthenticated");
     localStorage.removeItem("userEmail");
     localStorage.removeItem("userName");
-    router.push("/"); // Redirigir al home
+    router.push("/");
   };
 
-  const courses = [
-    {
-      id: 1,
-      title: "Roblox Studio",
-      icon: Gamepad2,
-      tagline: "Desarrollo de juegos con Lua",
-      levels: [
-        { 
-          id: "r1", 
-          name: "Nivel Básico", 
-          classesCompleted: 15, 
-          totalClasses: 20,
-          description: "Fundamentos de Roblox Studio y scripting básico"
-        },
-        { 
-          id: "r2", 
-          name: "Nivel Intermedio", 
-          classesCompleted: 8, 
-          totalClasses: 20,
-          description: "Mecánicas avanzadas y multiplayer"
-        },
-        { 
-          id: "r3", 
-          name: "Nivel Avanzado", 
-          classesCompleted: 0, 
-          totalClasses: 20,
-          description: "Optimización y publicación de juegos"
-        }
-      ],
-      color: "from-purple-500 to-pink-500",
-      totalLessons: 60
-    },
-    {
-      id: 2,
-      title: "Scratch",
-      icon: Code,
-      tagline: "Programación visual para niños",
-      levels: [
-        { 
-          id: "s1", 
-          name: "Nivel 1", 
-          classesCompleted: 20, 
-          totalClasses: 20,
-          description: "Lógica básica y animaciones"
-        },
-        { 
-          id: "s2", 
-          name: "Nivel 2", 
-          classesCompleted: 5, 
-         totalClasses: 20,
-         description: "Juegos interactivos y variables"
-        },
-      ],
-      color: "from-blue-500 to-cyan-400",
-      totalLessons: 40
-    }
-  ];
+const courses = [
+{
+id:1,
+title:"Roblox Studio",
+icon:Gamepad2,
+tagline:"Desarrollo de juegos con Lua",
+levels:[
+{
+id:"r1",
+name:"Nivel Básico",
+classesCompleted:15,
+totalClasses:20,
+description:"Fundamentos de Roblox Studio y scripting básico"
+},
+{
+id:"r2",
+name:"Nivel Intermedio",
+classesCompleted:8,
+totalClasses:20,
+description:"Mecánicas avanzadas y multiplayer"
+},
+{
+id:"r3",
+name:"Nivel Avanzado",
+classesCompleted:0,
+totalClasses:20,
+description:"Optimización y publicación de juegos"
+}
+],
+color:"from-purple-500 to-pink-500",
+totalLessons:60
+},
 
-  const assignments = [
-    {
-      id: 1,
-      title: "Crear un Objeto 3D en Roblox",
-      course: "Roblox - Nivel Básico",
-      dueDate: "2024-12-15",
-      status: "entregado",
-      grade: 4.8,
-      teacher: "Prof. Carlos",
-      teacherComment: "Excelente trabajo de modelado. El diseño es muy creativo.",
-      studentWork: "modelo_3d.png"
-    },
-    {
-      id: 2,
-      title: "Script de Movimiento para Personaje",
-      course: "Roblox - Nivel Intermedio",
-      dueDate: "2024-12-18",
-      status: "pendiente",
-      grade: null,
-      teacher: "Prof. María",
-      description: "Implementa movimiento fluido con WASD"
-    }
-  ];
+{
+id:2,
+title:"Scratch",
+icon:Code,
+tagline:"Programación visual para niños",
+levels:[
+{
+id:"s1",
+name:"Nivel Básico",
+classesCompleted:20,
+totalClasses:20,
+description:"Lógica básica y animaciones"
+},
+{
+id:"s2",
+name:"Nivel Intermedio",
+classesCompleted:5,
+totalClasses:20,
+description:"Juegos interactivos y variables"
+},
+{
+id:"s3",
+name:"Nivel Avanzado",
+classesCompleted:0,
+totalClasses:20,
+description:"Proyectos complejos y programación avanzada"
+}
+],
+color:"from-blue-500 to-cyan-400",
+totalLessons:60
+},
 
-  const achievements = [
-    {
-      id: 1,
-      title: "Completaste Nivel 1 de Scratch",
-      description: "20 clases finalizadas",
-      icon: Trophy,
-      color: "text-yellow-500",
-      date: "2024-11-30"
-    },
-    {
-      id: 2,
-      title: "Racha de 12 días",
-      description: "¡Asistencia perfecta!",
-      icon: Sparkles,
-      color: "text-green-500",
-      date: "2024-12-11"
-    }
-  ];
+{
+id:3,
+title:"Python + Pygame",
+icon:Rocket,
+tagline:"Programación con Python y videojuegos",
+levels:[
+{
+id:"p1",
+name:"Nivel Básico",
+classesCompleted:3,
+totalClasses:20,
+description:"Aprende Python desde cero y crea tus propios juegos"
+},
+{
+id:"p2",
+name:"Nivel Intermedio",
+classesCompleted:0,
+totalClasses:20,
+description:"Desarrolla juegos más complejos con lógica avanzada"
+},
+{
+id:"p3",
+name:"Nivel Avanzado",
+classesCompleted:0,
+totalClasses:20,
+description:"Crea juegos profesionales y optimiza tu código"
+}
+],
+color:"from-yellow-500 to-orange-600",
+totalLessons:60
+}
+]
 
-
-
-   useEffect(() => setMounted(true), []);
-    const currentTheme = mounted ? theme : "dark";
-    const color2 = currentTheme === "dark" ? "#ffffff" : "#0400FD";
-    const color3 = currentTheme === "dark" ? "#ffffff" : "#103E94";
+  useEffect(() => setMounted(true), []);
+  const currentTheme = mounted ? theme : "dark";
+  const color2 = currentTheme === "dark" ? "#ffffff" : "#0400FD";
+  const color3 = currentTheme === "dark" ? "#ffffff" : "#103E94";
 
   const titleClass = currentTheme === "dark"
     ? "text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-300"
@@ -183,20 +177,17 @@ const RDSKidsEducation = () => {
     <section id="education" className="relative py-20 overflow-hidden bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-[#0a0a1a]">
       <div className="container max-w-7xl mx-auto px-6">
         
-        {/* Header con botón de logout - NUEVO */}
+        {/* Header con botón de logout */}
         <div className="flex justify-between items-center mb-8">
           <div>
             <h1 className="text-3xl font-bold"></h1>
           </div>
-          
         </div>
 
         {/* Header Section */}
         <div className="mb-16 text-center">
-          
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
             🎮 ¡Hola, 
-           
             <span className={titleClass}> {studentData.name}! </span>
           </h2>
         </div>
@@ -229,14 +220,13 @@ const RDSKidsEducation = () => {
               </div>
               <div>
                 <h2 className="text-white font-bold text-2xl md:text-3xl mb-2">
-                  ¡Bienvenido a tu mundo, donde tu imaginación se hace codigo!
+                  ¡Bienvenido a tu mundo, donde tu imaginación se hace código!
                 </h2>
                 <p className="text-blue-200 text-lg">
                   Cada paso cuenta. Cada código enseña.
                 </p>
               </div>
             </div>
-              
           </div>
         </div>
 
@@ -279,22 +269,20 @@ const RDSKidsEducation = () => {
                   </div>
                   
                   <div className="grid grid-cols-1 gap-3">
-                    
                     <div className="text-center p-3 rounded-lg bg-purple-500/5">
                       <p className="text-2xl font-bold">{studentData.totalClasses}</p>
-                      <p className="text-sm text-gray-500">Clases</p>
+                      <p className="text-sm text-gray-500">Cursos</p>
                     </div>
                   </div>
                 </div>
                 <button
-                onClick={handleLogout}
-                className="flex items-center mt-5 gap-2 px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl hover:from-red-600 hover:to-red-700 transition-all duration-300"
-              >
-                <LogOut className="w-5 h-5" />
-                <span>Cerrar Sesión</span>
-              </button>
+                  onClick={handleLogout}
+                  className="flex items-center mt-5 gap-2 px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl hover:from-red-600 hover:to-red-700 transition-all duration-300"
+                >
+                  <LogOut className="w-5 h-5" />
+                  <span>Cerrar Sesión</span>
+                </button>
               </div>
-              
             </div>
           </div>
 
@@ -305,7 +293,8 @@ const RDSKidsEducation = () => {
             <div className="flex overflow-x-auto mb-8 pb-2">
               {[
                 { id: "cursos", label: "Mis Cursos", icon: BookOpen },
-               
+                { id: "tareas", label: "Tareas", icon: FileText },
+                { id: "logros", label: "Logros", icon: Trophy }
               ].map((tab) => (
                 <button
                   key={tab.id}
@@ -328,10 +317,9 @@ const RDSKidsEducation = () => {
                 {courses.map((course) => (
                   <Link
                     key={course.id}
-                    href={course.id === 1 ? "/roblox" : "/scratch"}
+                    href={course.id === 1 ? "/roblox" : course.id === 2 ? "/scratch" : "/pygame"}
                     className="group relative rounded-xl border border-blue-500/40 bg-white/80 dark:bg-[#181a2a]/80 p-6 hover:shadow-xl transition-all duration-300 cursor-pointer"
                   >
-                    {/* ... contenido del curso ... */}
                     <div className="relative z-10">
                       <div className="flex items-start gap-4 mb-6">
                         <div className={`p-4 rounded-xl bg-gradient-to-r ${course.color}`}>
