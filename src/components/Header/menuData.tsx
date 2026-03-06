@@ -14,5 +14,18 @@ const menuData: Menu[] = [
     path: "/iniciar-sesion",
     newTab: false,
   },
+ // {
+ //   id: 3,
+ //   title: "Mi Perfil",
+ //   path: "/rdsKids/perfil",
+ //   newTab: false,
+ // },
+ // {
+ //   id: 4,
+ //   title: "Configuración",
+ //   path: "/rdsKids/configuracion",
+ //   newTab: false,
+ // },
 ];
+
 export default menuData;

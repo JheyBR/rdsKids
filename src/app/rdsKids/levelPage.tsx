@@ -436,20 +436,14 @@ const LevelPage = ({ course, level, levelName }: LevelPageProps) => {
         onUpload={handleFileUpload}
       />
 
-      <div className="container max-w-7xl mx-auto px-6">
+      <div className="container max-w-12xl mx-auto px-6 mt-20">
         
         {/* Header Navigation */}
         <div className="mb-8">
-          <button
-            onClick={() => router.back()}
-            className="flex items-center gap-2 text-blue-500 hover:text-blue-600 dark:text-blue-400 mb-4"
-          >
-            <ChevronLeft className="w-5 h-5" />
-            Volver a cursos
-          </button>
+          
           
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-            <div>
+          
               <div className="flex items-center gap-3 mb-4">
                 <div className={`p-3 rounded-xl bg-gradient-to-r ${currentCourse.color}`}>
                   <Icon className="w-8 h-8 text-white" />
@@ -463,27 +457,16 @@ const LevelPage = ({ course, level, levelName }: LevelPageProps) => {
                   </p>
                 </div>
               </div>
-            </div>
+              <button
+                onClick={() => router.push(`/${course}`)}
+                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white dark:bg-[#181a2a] border border-blue-500/40 shadow-lg hover:scale-105 transition"
+              >
+                <ChevronLeft className="w-5 h-5" />
+                Volver
+              </button>
+      
             
-            {/* Progress Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="text-center p-4 rounded-xl border border-blue-500/20 bg-white/80 dark:bg-[#181a2a]/80">
-                <p className="text-2xl font-bold">{completedClasses}/20</p>
-                <p className="text-sm text-gray-500">Clases</p>
-              </div>
-              <div className="text-center p-4 rounded-xl border border-blue-500/20 bg-white/80 dark:bg-[#181a2a]/80">
-                <p className="text-2xl font-bold">{totalPoints}</p>
-                <p className="text-sm text-gray-500">Puntos</p>
-              </div>
-              <div className="text-center p-4 rounded-xl border border-blue-500/20 bg-white/80 dark:bg-[#181a2a]/80">
-                <p className="text-2xl font-bold">{Math.round(progressPercentage)}%</p>
-                <p className="text-sm text-gray-500">Progreso</p>
-              </div>
-              <div className="text-center p-4 rounded-xl border border-blue-500/20 bg-white/80 dark:bg-[#181a2a]/80">
-                <p className="text-2xl font-bold">{20 - completedClasses}</p>
-                <p className="text-sm text-gray-500">Restantes</p>
-              </div>
-            </div>
+
           </div>
         </div>
 

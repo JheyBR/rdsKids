@@ -10,6 +10,7 @@ import LogoOficialSigla from "@/components/Componentes/LogoOficialSigla";
 import {
   Gamepad2,
   Code,
+  Star,
   Rocket,
   BookOpen,
   CheckCircle,
@@ -34,6 +35,11 @@ const RDSKidsEducation = () => {
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [mounted, setMounted] = useState(false);
   const { theme } = useTheme();
+  const [expandedCourse, setExpandedCourse] = useState<number | null>(null);
+
+const toggleCourse = (courseId:number) => {
+  setExpandedCourse(expandedCourse === courseId ? null : courseId);
+};
   
   // Obtener datos del usuario del localStorage
   const [studentData, setStudentData] = useState({
@@ -44,6 +50,8 @@ const RDSKidsEducation = () => {
     totalClasses: 3, // Cambiado a 3 porque ahora hay 3 cursos
     completedLevels: 2
   });
+
+
 
   useEffect(() => {
     // Cargar datos del usuario al montar el componente
@@ -173,19 +181,53 @@ totalLessons:60
     ? "text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-300"
     : "text-[#355CFF]";
 
+     const floatingElements = [
+    { icon: Star, className: "top-20 left-[10%] text-yellow-300 animate-bounce", size: 24 },
+    { icon: Rocket, className: "bottom-20 right-[10%] text-blue-300 animate-pulse", size: 32 },
+    { icon: Gamepad2, className: "top-40 right-[15%] text-purple-300 animate-spin-slow", size: 28 },
+    { icon: Star, className: "bottom-40 left-[5%] text-pink-300 animate-float", size: 20 },
+  ];
+
   return (
-    <section id="education" className="relative py-20 overflow-hidden bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-[#0a0a1a]">
-      <div className="container max-w-7xl mx-auto px-6">
+    <section id="education" className="relative py-20 overflow-hidden  bg-gradient-to-b from-blue-100 via-purple-100 to-pink-100 dark:from-indigo-900 dark:via-purple-900 dark:to-pink-900">
+      <div className="container max-w-7xl mx-auto px-6 bg-transparent relative z-10">
+
+      {floatingElements.map((element, index) => (
+        <div
+          key={index}
+          className={`absolute ${element.className} opacity-50 z-0 hidden sm:block`}
+        >
+          <element.icon size={element.size} />
+        </div>
+      ))}
+
+      {/* Fondo de estrellas */}
+      <div className="absolute inset-0 overflow-hidden">
+        {[...Array(20)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute bg-white rounded-full animate-twinkle"
+            style={{
+              top: `${Math.random() * 100}%`,
+              left: `${Math.random() * 100}%`,
+              width: `${Math.random() * 4 + 2}px`,
+              height: `${Math.random() * 4 + 2}px`,
+              animationDelay: `${Math.random() * 5}s`,
+              opacity: Math.random() * 0.7 + 0.3,
+            }}
+          />
+        ))}
+      </div>
         
         {/* Header con botón de logout */}
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex justify-between items-center mb-4">
           <div>
             <h1 className="text-3xl font-bold"></h1>
           </div>
         </div>
 
         {/* Header Section */}
-        <div className="mb-16 text-center">
+        <div className="mb-10 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
             🎮 ¡Hola, 
             <span className={titleClass}> {studentData.name}! </span>
@@ -193,7 +235,7 @@ totalLessons:60
         </div>
 
         {/* Banner Header */}
-        <div className="relative mb-12">
+        <div className="relative mb-5">
           <Image
             src="/images/Who/BannerPC.jpeg"
             alt="RDS Kids Educación"
@@ -204,7 +246,6 @@ totalLessons:60
           />
           <div className="absolute inset-0 flex items-center justify-center px-6 text-center">
             <div className="grid grid-cols-2 justify-center-safe items-center gap-4">
-              
               <div className="ml-60 mt-[-50px] top-[-10px] left-1/2 transform -translate-x-1/2 w-[200px] sm:w-[250px] h-auto">
                 <div className="relative z-10">
                   <LogoOficialSigla color2={color2} color3={color3} />
@@ -230,61 +271,67 @@ totalLessons:60
           </div>
         </div>
 
-        {/* Main Dashboard Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-12">
-          
+        
           {/* User Profile Card */}
           <div className="lg:col-span-1">
             <div className="group relative rounded-xl border border-blue-500/40 bg-white/80 dark:bg-[#181a2a]/80 p-6 hover:shadow-xl transition-all duration-300">
-              <div className="flex flex-col items-center text-center">
-                <div className="relative mb-4">
-                  <div className="w-24 h-24 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center">
-                    <User className="w-12 h-12 text-white" />
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-center">
+
+                {/* USER */}
+                <div className="flex items-center gap-4 justify-center md:justify-start">
+
+                  <div className="w-20 h-20 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center">
+                    <User className="w-10 h-10 text-white" />
                   </div>
-                  <div className="absolute bottom-2 right-2 w-6 h-6 bg-green-500 rounded-full border-4 border-white dark:border-[#181a2a]"></div>
-                </div>
-                
-                <h3 className="text-2xl font-bold mb-1">{studentData.name}</h3>
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="px-3 py-1 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 text-sm font-medium">
-                    {studentData.role}
-                  </span>
-                  <span className="px-3 py-1 rounded-full bg-purple-500/10 text-purple-600 dark:text-purple-400 text-sm font-medium">
-                    {studentData.level}
-                  </span>
-                </div>
-                
-                <div className="w-full space-y-4">
+
                   <div>
-                    <div className="flex justify-between text-sm mb-1">
-                      <span>Progreso Total</span>
-                      <span>{studentData.progress}%</span>
+                    <h3 className="text-xl font-bold">{studentData.name}</h3>
+
+                    <div className="flex gap-2 mt-2 flex-wrap">
+                      <span className="px-3 py-1 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 text-xs font-medium">
+                        {studentData.role}
+                      </span>
+
+                      <span className="px-3 py-1 rounded-full bg-purple-500/10 text-purple-600 dark:text-purple-400 text-xs font-medium">
+                        {studentData.level}
+                      </span>
                     </div>
-                    <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                      <div 
+                  </div>
+
+                </div>
+
+                {/* PROGRESS AREA */}
+                <div className="md:col-span-2 lg:col-span-2 flex flex-col gap-4">
+
+                  {/* Progress */}
+                  <div>
+                    <div className="flex justify-between text-sm mb-2">
+                      <span className="font-medium">Progreso Total</span>
+                      <span className="font-semibold">{studentData.progress}%</span>
+                    </div>
+
+                    <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                      <div
                         className="h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full transition-all duration-500"
                         style={{ width: `${studentData.progress}%` }}
                       />
                     </div>
                   </div>
-                  
-                  <div className="grid grid-cols-1 gap-3">
-                    <div className="text-center p-3 rounded-lg bg-purple-500/5">
-                      <p className="text-2xl font-bold">{studentData.totalClasses}</p>
-                      <p className="text-sm text-gray-500">Cursos</p>
-                    </div>
+
+                  {/* Active Courses */}
+                  <div className="grid grid-cols-2 md:col-span-2 lg:col-span-2 rounded-xl border border-purple-500/20 bg-purple-500/5 p-4 text-center">
+                    <p className="text-xl text-gray-100">Cursos Activos</p>
+                    <p className="text-2xl font-bold">{studentData.totalClasses}</p>
                   </div>
+
                 </div>
-                <button
-                  onClick={handleLogout}
-                  className="flex items-center mt-5 gap-2 px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl hover:from-red-600 hover:to-red-700 transition-all duration-300"
-                >
-                  <LogOut className="w-5 h-5" />
-                  <span>Cerrar Sesión</span>
-                </button>
+
               </div>
+
             </div>
           </div>
+          
 
           {/* Main Content */}
           <div className="lg:col-span-3">
@@ -293,8 +340,8 @@ totalLessons:60
             <div className="flex overflow-x-auto mb-8 pb-2">
               {[
                 { id: "cursos", label: "Mis Cursos", icon: BookOpen },
-                { id: "tareas", label: "Tareas", icon: FileText },
-                { id: "logros", label: "Logros", icon: Trophy }
+                //{ id: "tareas", label: "Tareas", icon: FileText },
+                //{ id: "logros", label: "Logros", icon: Trophy }
               ].map((tab) => (
                 <button
                   key={tab.id}
@@ -313,12 +360,11 @@ totalLessons:60
 
             {/* Courses Section */}
             {activeTab === "cursos" && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {courses.map((course) => (
-                  <Link
+                  <div
                     key={course.id}
-                    href={course.id === 1 ? "/roblox" : course.id === 2 ? "/scratch" : "/pygame"}
-                    className="group relative rounded-xl border border-blue-500/40 bg-white/80 dark:bg-[#181a2a]/80 p-6 hover:shadow-xl transition-all duration-300 cursor-pointer"
+                    className="group relative rounded-xl border border-blue-500/40 bg-white/80 dark:bg-[#181a2a]/80 p-6 hover:shadow-xl transition-all duration-300"
                   >
                     <div className="relative z-10">
                       <div className="flex items-start gap-4 mb-6">
@@ -329,11 +375,15 @@ totalLessons:60
                           <h3 className="text-2xl font-bold mb-2">{course.title}</h3>
                           <p className="text-gray-600 dark:text-gray-300">{course.tagline}</p>
                         </div>
-                        <ChevronRight className="w-6 h-6 text-gray-400 group-hover:text-blue-500 transition-colors" />
+                        <Link
+                          href={course.id === 1 ? "/roblox" : course.id === 2 ? "/scratch" : "/pygame"}
+                        >
+                          <ChevronRight className="w-6 h-6 text-gray-400 hover:text-blue-500 transition-colors cursor-pointer" />
+                        </Link>
                       </div>
 
-                      {/* Levels Progress */}
-                      <div className="space-y-4">
+                      {expandedCourse === course.id && (
+                      <div className="space-y-4 mt-4 animate-fadeIn">
                         {course.levels.map((level) => (
                           <div key={level.id} className="group/level">
                             <div className="flex justify-between items-center mb-2">
@@ -358,6 +408,7 @@ totalLessons:60
                           </div>
                         ))}
                       </div>
+                      )}
                       
                       {/* Total Course Progress */}
                       <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
@@ -371,18 +422,31 @@ totalLessons:60
 
                       {/* Ver curso completo button */}
                       <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
-                        <div className="inline-flex items-center gap-2 text-blue-500 hover:text-blue-600 dark:text-blue-400 font-medium">
-                          Ver curso completo
-                          <ChevronRight className="w-4 h-4" />
-                        </div>
+                        
+                        <Link
+                            href={course.id === 1 ? "/roblox" : course.id === 2 ? "/scratch" : "/pygame"}
+                          >
+                            <button className="w-full flex items-center justify-center gap-2 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold hover:from-blue-600 hover:to-purple-600 transition-all">
+                              <GraduationCap className="w-5 h-5" />
+                              Ingresar al curso
+                            </button>
+                          </Link>
+                        
+                        
+                        <button
+                          onClick={() => toggleCourse(course.id)}
+                          className="mt-4 w-full text-center py-2 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 text-blue-600 dark:text-blue-400 font-medium transition-all"
+                        >
+                          {expandedCourse === course.id ? "Ver menos ▲" : "Ver más ▼"}
+                        </button>
                       </div>
                     </div>
-                  </Link>
+                  </div>
                 ))}
               </div>
             )}
 
-            {/* Sección de Tareas */}
+            {/* Sección de Tareas 
             {activeTab === "tareas" && (
               <div className="space-y-4">
                 {assignments.map((assignment) => (
@@ -403,9 +467,9 @@ totalLessons:60
                   </div>
                 ))}
               </div>
-            )}
+            )}*/}
 
-            {/* Sección de Logros */}
+            {/* Sección de Logros 
             {activeTab === "logros" && (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {achievements.map((achievement) => (
@@ -418,9 +482,9 @@ totalLessons:60
                   </div>
                 ))}
               </div>
-            )}
+            )}*/}
           </div>
-        </div>
+        
       </div>
     </section>
   );

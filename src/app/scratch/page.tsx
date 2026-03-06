@@ -92,9 +92,27 @@ export default function ScratchPage() {
         
         {/* Hero Section */}
         <div className="mb-16 text-center">
-          <div className="inline-flex items-center gap-3 mb-6 px-4 py-2 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400">
-            <Sparkles className="w-4 h-4" />
-            <span className="font-medium">Ideal para principiantes de 8 a 12 años</span>
+          <div className="flex flex-col items-center gap-4 mb-6">
+
+            <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400">
+              <Sparkles className="w-4 h-4" />
+              <span className="font-medium">Ideal para principiantes de 8 a 12 años</span>
+            </div>
+
+            <Link
+              href="/rdsKids"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg 
+              border border-blue-500/30 
+              bg-white/80 dark:bg-[#1a1a2a]/80
+              hover:bg-blue-500/60 hover:border-blue-500/90
+              hover:shadow-md
+              transition-all duration-200
+              group"
+            >
+              <ChevronRight className="w-5 h-5 rotate-180 transition-transform group-hover:-translate-x-3" />
+              Volver al Inicio
+            </Link>
+
           </div>
           
           <h1 className="text-4xl md:text-6xl font-bold mb-6">
@@ -128,10 +146,12 @@ export default function ScratchPage() {
             {levels.map((level) => {
               const Icon = level.icon;
               return (
-                <Link
+                <div
                   key={level.number}
-                  href={`/scratch/level-${level.number}`}
-                  className="group relative overflow-hidden rounded-2xl border border-blue-500/30 bg-gradient-to-br from-white to-blue-50/50 dark:from-[#181a2a] dark:to-blue-950/30 p-8 hover:shadow-2xl transition-all duration-500 hover:-translate-y-2"
+                  className={`group relative overflow-hidden rounded-2xl border border-blue-500/30 
+                  bg-gradient-to-br from-white to-blue-50/50 dark:from-[#181a2a] dark:to-blue-950/30 
+                  p-8 transition-all duration-500 hover:-translate-y-2
+                  ${level.number !== 1 ? "opacity-70 cursor-not-allowed" : "hover:shadow-2xl"}`}
                 >
                   {/* Glow Effect */}
                   <div
@@ -177,12 +197,24 @@ export default function ScratchPage() {
                     
                     {/* CTA */}
                     <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
-                      <button className="w-full py-3 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-lg font-semibold hover:opacity-90 transition">
-                        {level.number === 1 ? "Comenzar Gratis" : "Continuar Nivel"}
+                    {level.number === 1 ? (
+                      <Link
+                        href={`/scratch/level-${level.number}`}
+                        className="block w-full text-center py-3 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-lg font-semibold hover:opacity-90 transition"
+                      >
+                        Ingresar
+                      </Link>
+                    ) : (
+                      <button
+                        disabled
+                        className="w-full py-3 bg-gray-300 dark:bg-gray-700 text-gray-500 rounded-lg font-semibold cursor-not-allowed"
+                      >
+                        Bloqueado
                       </button>
+                    )}
                     </div>
                   </div>
-                </Link>
+                </div>
               );
             })}
           </div>

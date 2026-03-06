@@ -106,11 +106,30 @@ export default function RobloxPage() {
     <div className="min-h-screen bg-gradient-to-b from-purple-50 to-pink-50 dark:from-gray-900 dark:to-[#1a0a2a] py-12">
       <div className="container mx-auto px-6">
         
+        
         {/* Hero Section */}
         <div className="mb-16 text-center">
-          <div className="inline-flex items-center gap-3 mb-6 px-4 py-2 rounded-full bg-purple-500/10 text-purple-600 dark:text-purple-400">
-            <Sparkles className="w-4 h-4" />
-            <span className="font-medium">Para jóvenes de 10 a 14 años</span>
+          <div className="flex flex-col items-center gap-4 mb-6">
+
+            <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-purple-500/10 text-purple-600 dark:text-purple-400">
+              <Sparkles className="w-4 h-4" />
+              <span className="font-medium">Para jóvenes de 10 a 14 años</span>
+            </div>
+
+            <Link
+              href="/rdsKids"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg 
+              border border-purple-500/30 
+              bg-white/80 dark:bg-[#1a1a2a]/80
+              hover:bg-purple-500/60 hover:border-purple-500/90
+              hover:shadow-md
+              transition-all duration-200
+              group"
+            >
+              <ChevronRight className="w-5 h-5 rotate-180 transition-transform group-hover:-translate-x-3 " />
+              Volver al Inicio
+            </Link>
+
           </div>
           
           <h1 className="text-4xl md:text-6xl font-bold mb-6">
@@ -139,14 +158,16 @@ export default function RobloxPage() {
             Programa completo de 60 clases divididas en 3 niveles profesionales
           </p>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {levels.map((level) => {
               const Icon = level.icon;
               return (
-                <Link
+                <div
                   key={level.number}
-                  href={`/roblox/level-${level.number}`}
-                  className="group relative overflow-hidden rounded-2xl border border-purple-500/30 bg-gradient-to-br from-white to-purple-50/50 dark:from-[#1a1a2a] dark:to-purple-950/30 p-8 hover:shadow-2xl transition-all duration-500 hover:-translate-y-2"
+                  className={`group relative overflow-hidden rounded-2xl border border-purple-500/30 
+                  bg-gradient-to-br from-white to-purple-50/50 dark:from-[#1a1a2a] dark:to-purple-950/30 
+                  p-8 transition-all duration-500 hover:-translate-y-2
+                  ${level.number !== 1 ? "opacity-70 cursor-not-allowed" : "hover:shadow-2xl"}`}
                 >
                   {/* Glow Effect */}
                   <div
@@ -207,12 +228,24 @@ export default function RobloxPage() {
                     
                     {/* CTA */}
                     <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
-                      <button className="w-full py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg font-semibold hover:opacity-90 transition">
-                        {level.number === 1 ? "Iniciar Nivel" : "Continuar Nivel"}
-                      </button>
+                      {level.number === 1 ? (
+                        <Link
+                          href={`/roblox/level-${level.number}`}
+                          className="block w-full text-center py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg font-semibold hover:opacity-90 transition"
+                        >
+                          Ingresar
+                        </Link>
+                      ) : (
+                        <button
+                          disabled
+                          className="w-full py-3 bg-gray-300 dark:bg-gray-700 text-gray-500 rounded-lg font-semibold cursor-not-allowed"
+                        >
+                          Bloqueado
+                        </button>
+                      )}
                     </div>
                   </div>
-                </Link>
+                </div>
               );
             })}
           </div>

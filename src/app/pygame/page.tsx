@@ -34,7 +34,7 @@ export default function PythonPage() {
       description: "Aprende los fundamentos de programación con Python",
       icon: Terminal,
       color: "from-yellow-500 to-orange-600",
-      topics: ["Variables", "Condicionales", "Bucles", "Funciones", "Pygame básico"]
+      
     },
     { 
       number: 2, 
@@ -43,7 +43,7 @@ export default function PythonPage() {
       description: "Crea juegos más complejos con Pygame",
       icon: Gamepad2,
       color: "from-orange-500 to-red-500",
-      topics: ["Listas", "Diccionarios", "Sprites", "Enemigos", "IA básica"]
+
     },
     { 
       number: 3, 
@@ -52,7 +52,7 @@ export default function PythonPage() {
       description: "Programación orientada a objetos y juegos avanzados",
       icon: Brain,
       color: "from-red-500 to-purple-500",
-      topics: ["POO", "Herencia", "Físicas", "Networking", "Publicación"]
+
     }
   ];
 
@@ -109,9 +109,27 @@ export default function PythonPage() {
         
         {/* Hero Section */}
         <div className="mb-16 text-center">
-          <div className="inline-flex items-center gap-3 mb-6 px-4 py-2 rounded-full bg-yellow-500/10 text-yellow-600 dark:text-yellow-400">
-            <Sparkles className="w-4 h-4" />
-            <span className="font-medium">Para jóvenes de 12 a 16 años</span>
+          <div className="flex flex-col items-center gap-4 mb-6">
+
+            <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-yellow-500/10 text-yellow-600 dark:text-yellow-400">
+              <Sparkles className="w-4 h-4" />
+              <span className="font-medium">Para jóvenes de 12 a 16 años</span>
+            </div>
+
+            <Link
+              href="/rdsKids"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg 
+              border border-yellow-500/30 
+              bg-white/80 dark:bg-[#1a1a2a]/80
+              hover:bg-yellow-500/60 hover:border-yellow-500/90
+              hover:shadow-md
+              transition-all duration-200
+              group"
+            >
+              <ChevronRight className="w-5 h-5 rotate-180 transition-transform group-hover:-translate-x-3" />
+              Volver al Inicio
+            </Link>
+
           </div>
           
           <h1 className="text-4xl md:text-6xl font-bold mb-6">
@@ -139,14 +157,16 @@ export default function PythonPage() {
             Programa completo de 60 clases divididas en 3 niveles desde fundamentos hasta desarrollo profesional
           </p>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {levels.map((level) => {
               const Icon = level.icon;
               return (
-                <Link
+                <div
                   key={level.number}
-                  href={`/pygame/level-${level.number}`}
-                  className="group relative overflow-hidden rounded-2xl border border-yellow-500/30 bg-gradient-to-br from-white to-yellow-50/50 dark:from-[#1a1a2a] dark:to-orange-950/30 p-8 hover:shadow-2xl transition-all duration-500 hover:-translate-y-2"
+                  className={`group relative overflow-hidden rounded-2xl border border-yellow-500/30 
+                  bg-gradient-to-br from-white to-yellow-50/50 dark:from-[#1a1a2a] dark:to-orange-950/30 
+                  p-8 transition-all duration-500 hover:-translate-y-2
+                  ${level.number !== 1 ? "opacity-70 cursor-not-allowed" : "hover:shadow-2xl"}`}
                 >
                   {/* Glow Effect */}
                   <div
@@ -188,31 +208,28 @@ export default function PythonPage() {
                       </div>
                     </div>
                     
-                    {/* Topics */}
-                    <div className="mb-6">
-                      <h4 className="font-semibold mb-3 text-gray-700 dark:text-gray-300">
-                        Lo que aprenderás:
-                      </h4>
-                      <div className="flex flex-wrap gap-2">
-                        {level.topics.map((topic, idx) => (
-                          <span 
-                            key={idx}
-                            className="px-3 py-1.5 rounded-full bg-yellow-500/10 text-yellow-700 dark:text-yellow-300 text-sm"
-                          >
-                            {topic}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
+
                     
                     {/* CTA */}
                     <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
-                      <button className="w-full py-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-white rounded-lg font-semibold hover:opacity-90 transition">
-                        {level.number === 1 ? "Iniciar Nivel" : "Continuar Nivel"}
+                    {level.number === 1 ? (
+                      <Link
+                        href={`/pygame/level-${level.number}`}
+                        className="block w-full text-center py-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-white rounded-lg font-semibold hover:opacity-90 transition"
+                      >
+                        Ingresar
+                      </Link>
+                    ) : (
+                      <button
+                        disabled
+                        className="w-full py-3 bg-gray-300 dark:bg-gray-700 text-gray-500 rounded-lg font-semibold cursor-not-allowed"
+                      >
+                        Bloqueado
                       </button>
+                    )}
                     </div>
                   </div>
-                </Link>
+                </div>
               );
             })}
           </div>
@@ -245,115 +262,7 @@ export default function PythonPage() {
           </div>
         </div>
 
-        {/* Projects Showcase */}
-        <div className="mb-20">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-center">
-            Proyectos que crearás
-          </h2>
-          <p className="text-gray-600 dark:text-gray-300 text-center mb-12 max-w-2xl mx-auto">
-            Aplica tus conocimientos creando juegos completos y funcionales
-          </p>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {projects.map((project, idx) => (
-              <div 
-                key={idx}
-                className="group relative overflow-hidden rounded-2xl border border-yellow-500/30 bg-white/80 dark:bg-[#1a1a2a]/80 p-8 hover:shadow-xl transition-all duration-300"
-              >
-                <div className="absolute top-4 right-4">
-                  <span className={`px-3 py-1 rounded-full text-xs font-medium
-                    ${project.difficulty === 'Principiante' ? 'bg-green-500/10 text-green-600' :
-                      project.difficulty === 'Intermedio' ? 'bg-yellow-500/10 text-yellow-600' :
-                      'bg-red-500/10 text-red-600'}`}>
-                    {project.difficulty}
-                  </span>
-                </div>
-                
-                <h3 className="text-xl font-bold mb-3 mt-4">{project.title}</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                  Duración: {project.duration}
-                </p>
-                
-                <div className="mb-6">
-                  <h4 className="text-sm font-semibold mb-2">Habilidades:</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {project.skills.map((skill, i) => (
-                      <span key={i} className="px-2 py-1 text-xs rounded-full bg-yellow-500/10 text-yellow-700 dark:text-yellow-300">
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-                
-                <Link href={project.link}>
-                  <button className="w-full py-2 border border-yellow-500/30 text-yellow-600 dark:text-yellow-400 rounded-lg font-medium hover:bg-yellow-500/10 transition">
-                    Ver proyecto
-                  </button>
-                </Link>
-              </div>
-            ))}
-          </div>
-        </div>
 
-        {/* Currículum Detallado */}
-        <div className="mb-20">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-center">
-            Contenido del Curso
-          </h2>
-          <p className="text-gray-600 dark:text-gray-300 text-center mb-12 max-w-2xl mx-auto">
-            Descubre todo lo que aprenderás en cada nivel
-          </p>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="p-6 rounded-xl border border-yellow-500/30 bg-white/80 dark:bg-[#1a1a2a]/80">
-              <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-                <div className="p-2 rounded-lg bg-yellow-500/10">
-                  <Terminal className="w-5 h-5 text-yellow-500" />
-                </div>
-                Nivel 1: Fundamentos
-              </h3>
-              <ul className="space-y-2">
-                <li className="text-sm text-gray-600 dark:text-gray-300">✓ ¿Qué es programar?</li>
-                <li className="text-sm text-gray-600 dark:text-gray-300">✓ Variables y tipos de datos</li>
-                <li className="text-sm text-gray-600 dark:text-gray-300">✓ Condicionales y bucles</li>
-                <li className="text-sm text-gray-600 dark:text-gray-300">✓ Funciones básicas</li>
-                <li className="text-sm text-gray-600 dark:text-gray-300">✓ Introducción a Pygame</li>
-              </ul>
-            </div>
-            
-            <div className="p-6 rounded-xl border border-yellow-500/30 bg-white/80 dark:bg-[#1a1a2a]/80">
-              <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-                <div className="p-2 rounded-lg bg-orange-500/10">
-                  <Gamepad2 className="w-5 h-5 text-orange-500" />
-                </div>
-                Nivel 2: Pygame Intermedio
-              </h3>
-              <ul className="space-y-2">
-                <li className="text-sm text-gray-600 dark:text-gray-300">✓ Listas y diccionarios</li>
-                <li className="text-sm text-gray-600 dark:text-gray-300">✓ Sprites y animaciones</li>
-                <li className="text-sm text-gray-600 dark:text-gray-300">✓ Sistema de enemigos</li>
-                <li className="text-sm text-gray-600 dark:text-gray-300">✓ IA básica</li>
-                <li className="text-sm text-gray-600 dark:text-gray-300">✓ Sistema de niveles</li>
-              </ul>
-            </div>
-            
-            <div className="p-6 rounded-xl border border-yellow-500/30 bg-white/80 dark:bg-[#1a1a2a]/80">
-              <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-                <div className="p-2 rounded-lg bg-red-500/10">
-                  <Brain className="w-5 h-5 text-red-500" />
-                </div>
-                Nivel 3: Profesional
-              </h3>
-              <ul className="space-y-2">
-                <li className="text-sm text-gray-600 dark:text-gray-300">✓ Programación Orientada a Objetos</li>
-                <li className="text-sm text-gray-600 dark:text-gray-300">✓ Herencia y clases</li>
-                <li className="text-sm text-gray-600 dark:text-gray-300">✓ Sistema de físicas</li>
-                <li className="text-sm text-gray-600 dark:text-gray-300">✓ Networking básico</li>
-                <li className="text-sm text-gray-600 dark:text-gray-300">✓ Publicación y distribución</li>
-              </ul>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );
