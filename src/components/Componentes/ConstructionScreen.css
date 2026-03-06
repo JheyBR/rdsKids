@@ -1,0 +1,121 @@
+/* ConstructionScreen.css */
+.computer-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
+.computer-frame {
+  width: 800px;
+  max-width: 100%;
+  background: #e2e2e2;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.screen {
+  background: #1e1e1e;
+  border-radius: 5px;
+  overflow: hidden;
+  font-family: 'Courier New', monospace;
+  color: #d4d4d4;
+}
+
+.screen-header {
+  background: #3c3c3c;
+  padding: 8px 15px;
+  display: flex;
+  align-items: center;
+}
+
+.buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.buttons span {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.close {
+  background: #ff5f56;
+}
+
+.minimize {
+  background: #ffbd2e;
+}
+
+.maximize {
+  background: #27c93f;
+}
+
+.title {
+  margin-left: 15px;
+  font-size: 0.8rem;
+  color: #9e9e9e;
+}
+
+.code-area {
+  padding: 15px;
+  min-height: 300px;
+  position: relative;
+}
+
+.code-line {
+  display: flex;
+  margin-bottom: 5px;
+  opacity: 0;
+  animation: fadeIn 0.3s forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+.line-number {
+  color: #858585;
+  margin-right: 15px;
+  min-width: 20px;
+  text-align: right;
+}
+
+.cursor {
+  animation: blink 1s infinite;
+  color: #d4d4d4;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.construction-message {
+  text-align: center;
+  margin-top: 5px;
+  animation: fadeIn 1s ease-in;
+}
+
+.construction-message h1 {
+  color: #ffbd2e;
+  margin-bottom: 20px;
+}
+
+.construction-message p {
+  color: #d4d4d4;
+  font-size: 1.2rem;
+}
+
+.keyboard {
+  width: 100%;
+  height: 30px;
+  background: #c0c0c0;
+  margin-top: 15px;
+  border-radius: 3px;
+}
