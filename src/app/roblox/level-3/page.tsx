@@ -1,7 +1,7 @@
 // src/app/roblox/level-3/page.tsx
 "use client";
 
-import LevelPage from '../../../components/rdsKids/levelPage';
+import LevelPage from '../../rdsKids/levelPage';
 export default function RobloxLevel3Page() {
   return (
     <LevelPage 

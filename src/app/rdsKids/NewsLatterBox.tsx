@@ -1,3 +1,4 @@
+//app/rdsKids/NewsLatterBox.tsx
 "use client";
 
 import { useTheme } from "next-themes";

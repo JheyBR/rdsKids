@@ -12,7 +12,7 @@ const menuData: Menu[] = [
   {
     id: 2,
     title: "Iniciar Sesión",
-    path: "/rds-Kids",
+    path: "/iniciar-sesion",
     newTab: false,
   },
   

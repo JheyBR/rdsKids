@@ -1,7 +1,7 @@
 // src/app/scratch/level-2/page.tsx
 "use client";
 
-import LevelPage from '@/components/rdsKids/levelPage'
+import LevelPage from '@/app/rdsKids/levelPage'
 
 export default function ScratchLevel2Page() {
   return (
