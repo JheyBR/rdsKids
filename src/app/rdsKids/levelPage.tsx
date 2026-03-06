@@ -19,7 +19,13 @@ import {
   Gamepad2,
   Star,
   Target,
-  BarChart3
+  BarChart3,
+  Rocket,
+  Zap,
+  Shield,
+  Heart,
+  Music,
+  Image as ImageIcon
 } from 'lucide-react';
 import { useRouter } from "next/navigation";
 
@@ -36,7 +42,7 @@ interface ClassItem {
 }
 
 interface LevelPageProps {
-  course: 'roblox' | 'scratch';
+  course: 'roblox' | 'scratch' | 'pygame';
   level: number;
   levelName: string;
 }
@@ -60,6 +66,13 @@ const LevelPage = ({ course, level, levelName }: LevelPageProps) => {
       color: "from-blue-500 to-cyan-400",
       totalLevels: 2,
       description: "Programación visual para niños"
+    },
+    pygame: {
+      title: "Python + Pygame",
+      icon: Rocket,
+      color: "from-yellow-500 to-orange-600",
+      totalLevels: 4,
+      description: "Programación con Python y creación de juegos"
     }
   };
 
@@ -71,12 +84,12 @@ const LevelPage = ({ course, level, levelName }: LevelPageProps) => {
     id: i + 1,
     title: `Clase ${i + 1}: ${getClassTitle(course, level, i + 1)}`,
     description: getClassDescription(course, level, i + 1),
-    duration: i < 5 ? "45 min" : i < 10 ? "60 min" : "75 min",
-    type: getClassType(i + 1),
+    duration: "60 min", // Todas las clases de Pygame son de 60 minutos
+    type: getClassType(course, i + 1),
     status: getClassStatus(i + 1),
-    points: calculatePoints(i + 1),
-    resources: ['Video', 'PDF', 'Proyecto Ejemplo'],
-    projectUrl: i % 4 === 0 ? `/projects/${course}/level${level}/class${i+1}` : undefined
+    points: calculatePoints(course, i + 1),
+    resources: getResourcesForClass(course, i + 1),
+    projectUrl: i === 19 ? `/projects/${course}/final` : undefined // Clase 20 es proyecto final
   }));
 
   function getClassTitle(course: string, level: number, classNum: number): string {
@@ -126,7 +139,37 @@ const LevelPage = ({ course, level, levelName }: LevelPageProps) => {
       "Reto Final"
     ];
 
-    const titles = course === 'roblox' ? robloxTitles : scratchTitles;
+    const pygameTitles = [
+      // FASE 1 – Fundamentos de Python (Clases 1–5)
+      "¿Qué es programar? - Introducción a Python",
+      "Entrada de datos y matemáticas",
+      "Condicionales - Tomando decisiones",
+      "Bucles - Repetir acciones",
+      "Funciones - Creando nuestros propios comandos",
+      
+      // FASE 2 – Introducción a Pygame (Clases 6–10)
+      "Primera ventana con Pygame",
+      "Dibujar en pantalla",
+      "Movimiento de objetos",
+      "Control por teclado",
+      "Detección de colisiones",
+      
+      // FASE 3 – Construcción del Juego (Clases 11–17)
+      "Estructura del juego",
+      "Velocidad y dificultad",
+      "Sistema de puntuación",
+      "Sistema de vidas",
+      "Efectos de sonido",
+      "Sprites e imágenes",
+      "Pantalla de inicio y reinicio",
+      
+      // FASE 4 – Proyecto Final (Clases 18–20)
+      "Diseño del juego en papel",
+      "Desarrollo del juego",
+      "🎮 Feria tecnológica - Presentación final"
+    ];
+
+    const titles = course === 'roblox' ? robloxTitles : course === 'scratch' ? scratchTitles : pygameTitles;
     return titles[classNum - 1] || `Clase ${classNum}`;
   }
 
@@ -175,6 +218,35 @@ const LevelPage = ({ course, level, levelName }: LevelPageProps) => {
         "Desarrolla un juego completo",
         "Comparte tu proyecto con la comunidad",
         "Proyecto final integrador"
+      ],
+      pygame: [
+        // FASE 1
+        "Entiende qué es programar con actividades divertidas de robot y tu primer código en Python",
+        "Aprende a pedir datos al usuario y hacer cálculos matemáticos como una calculadora gamer",
+        "Descubre cómo tomar decisiones con condicionales y crea un juego de adivinar números",
+        "Domina los bucles para repetir acciones y crear contadores para niveles",
+        "Crea tus propias funciones para tener poderes especiales en tu juego",
+        
+        // FASE 2
+        "Crea tu primera ventana de juego con Pygame y entiende el bucle principal del juego",
+        "Aprende a dibujar formas, usar colores y coordenadas para crear tu personaje",
+        "Haz que los objetos cobren vida y se muevan por la pantalla",
+        "Controla tu personaje con las teclas del teclado",
+        "Detecta cuando los objetos chocan y crea un juego de recoger monedas",
+        
+        // FASE 3
+        "Organiza tu código con la estructura profesional de juegos",
+        "Ajusta la velocidad del juego y crea niveles de dificultad",
+        "Implementa un sistema de puntuación que cuenta tus logros",
+        "Añade vidas a tu personaje para hacer el juego más emocionante",
+        "Incorpora música y efectos de sonido a tu juego",
+        "Trabaja con imágenes y sprites para darle vida a tu juego",
+        "Crea una pantalla de inicio y permite reiniciar el juego",
+        
+        // FASE 4
+        "Diseña tu propio juego en papel: personajes, reglas y mecánicas",
+        "Programa tu juego completo aplicando todo lo aprendido",
+        "Presenta tu creación en la feria tecnológica y comparte con amigos"
       ]
     };
 
@@ -182,7 +254,14 @@ const LevelPage = ({ course, level, levelName }: LevelPageProps) => {
     return descArray[classNum - 1] || `Descripción de la clase ${classNum}`;
   }
 
-  function getClassType(classNum: number): 'video' | 'taller' | 'proyecto' {
+  function getClassType(course: string, classNum: number): 'video' | 'taller' | 'proyecto' {
+    if (course === 'pygame') {
+      if (classNum === 20) return 'proyecto'; // Feria tecnológica
+      if (classNum % 5 === 0 || classNum === 17) return 'taller'; // Mini retos y proyectos
+      return 'video';
+    }
+    
+    // Comportamiento original para otros cursos
     if (classNum % 5 === 0) return 'proyecto';
     if (classNum % 2 === 0) return 'taller';
     return 'video';
@@ -197,15 +276,53 @@ const LevelPage = ({ course, level, levelName }: LevelPageProps) => {
     return 'locked';
   }
 
-  function calculatePoints(classNum: number): number {
-    if (classNum % 5 === 0) return 50; // Proyectos valen más
-    if (classNum % 2 === 0) return 30; // Talleres
-    return 20; // Videos
+  function calculatePoints(course: string, classNum: number): number {
+    if (course === 'pygame') {
+      if (classNum === 20) return 100; // Proyecto final
+      if (classNum % 5 === 0) return 40; // Talleres importantes
+      return 25; // Clases regulares
+    }
+    
+    // Puntos originales para otros cursos
+    if (classNum % 5 === 0) return 50;
+    if (classNum % 2 === 0) return 30;
+    return 20;
+  }
+
+  function getResourcesForClass(course: string, classNum: number): string[] {
+    if (course === 'pygame') {
+      const resources = ['Video', 'Código ejemplo'];
+      
+      // Añadir recursos específicos según la clase
+      if (classNum <= 5) {
+        resources.push('Ejercicios Python');
+      } else if (classNum <= 10) {
+        resources.push('Plantilla Pygame');
+      } else if (classNum <= 17) {
+        resources.push('Assets del juego');
+      } else {
+        resources.push('Guía del proyecto');
+      }
+      
+      return resources;
+    }
+    
+    return ['Archivo', 'Presentación  '];
   }
 
   const completedClasses = classes.filter(c => c.status === 'completed').length;
   const totalPoints = classes.reduce((sum, c) => c.status === 'completed' ? sum + c.points : sum, 0);
   const progressPercentage = (completedClasses / 20) * 100;
+
+  // Función para obtener el nombre de la fase según el curso
+  const getPhaseName = (course: string, classNum: number): string => {
+    if (course !== 'pygame') return '';
+    
+    if (classNum <= 5) return 'Fase 1: Fundamentos de Python';
+    if (classNum <= 10) return 'Fase 2: Introducción a Pygame';
+    if (classNum <= 17) return 'Fase 3: Construcción del Juego';
+    return 'Fase 4: Proyecto Final';
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-[#0a0a1a] py-8">
@@ -232,31 +349,18 @@ const LevelPage = ({ course, level, levelName }: LevelPageProps) => {
                     {currentCourse.title} - {levelName}
                   </h1>
                   <p className="text-gray-600 dark:text-gray-300">
-                    Nivel {level} de {currentCourse.totalLevels} • 20 clases
+                    {course === 'pygame' ? '4 fases • 20 clases • 60 min cada una' : `Nivel ${level} de ${currentCourse.totalLevels} • 20 clases`}
                   </p>
+                  {course === 'pygame' && (
+                    <p className="text-sm text-yellow-600 dark:text-yellow-400 mt-1">
+                      {currentCourse.description}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
             
-            {/* Progress Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="text-center p-4 rounded-xl border border-blue-500/20 bg-white/80 dark:bg-[#181a2a]/80">
-                <p className="text-2xl font-bold">{completedClasses}/20</p>
-                <p className="text-sm text-gray-500">Clases</p>
-              </div>
-              <div className="text-center p-4 rounded-xl border border-blue-500/20 bg-white/80 dark:bg-[#181a2a]/80">
-                <p className="text-2xl font-bold">{totalPoints}</p>
-                <p className="text-sm text-gray-500">Puntos</p>
-              </div>
-              <div className="text-center p-4 rounded-xl border border-blue-500/20 bg-white/80 dark:bg-[#181a2a]/80">
-                <p className="text-2xl font-bold">{Math.round(progressPercentage)}%</p>
-                <p className="text-sm text-gray-500">Progreso</p>
-              </div>
-              <div className="text-center p-4 rounded-xl border border-blue-500/20 bg-white/80 dark:bg-[#181a2a]/80">
-                <p className="text-2xl font-bold">{20 - completedClasses}</p>
-                <p className="text-sm text-gray-500">Restantes</p>
-              </div>
-            </div>
+            
           </div>
         </div>
 
@@ -275,7 +379,7 @@ const LevelPage = ({ course, level, levelName }: LevelPageProps) => {
         </div>
 
         {/* Class Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-1  gap-8">
           
           {/* Class List */}
           <div className="lg:col-span-2">
@@ -284,8 +388,26 @@ const LevelPage = ({ course, level, levelName }: LevelPageProps) => {
                 <BookOpen className="w-6 h-6" />
                 Lista de Clases
               </h2>
+              {course === 'pygame' && (
+                <div className="flex gap-2 mb-4 flex-wrap">
+                  <span className="px-3 py-1 rounded-full bg-yellow-500/10 text-yellow-600 dark:text-yellow-400 text-sm">
+                    🐍 Fase 1: Python
+                  </span>
+                  <span className="px-3 py-1 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 text-sm">
+                    🎮 Fase 2: Pygame
+                  </span>
+                  <span className="px-3 py-1 rounded-full bg-purple-500/10 text-purple-600 dark:text-purple-400 text-sm">
+                    ⚙️ Fase 3: Desarrollo
+                  </span>
+                  <span className="px-3 py-1 rounded-full bg-green-500/10 text-green-600 dark:text-green-400 text-sm">
+                    🏆 Fase 4: Proyecto
+                  </span>
+                </div>
+              )}
               <p className="text-gray-600 dark:text-gray-300 mb-6">
-                Completa las 20 clases en orden para desbloquear el siguiente nivel.
+                {course === 'pygame' 
+                  ? 'Aprende Python desde cero y crea tus propios videojuegos con Pygame. ¡20 clases para convertirte en desarrollador de juegos!'
+                  : 'Completa las 20 clases en orden para desbloquear el siguiente nivel.'}
               </p>
             </div>
 
@@ -334,6 +456,11 @@ const LevelPage = ({ course, level, levelName }: LevelPageProps) => {
                       <div className="flex flex-col md:flex-row md:items-center justify-between mb-3">
                         <div>
                           <h3 className="text-xl font-bold mb-2">{classItem.title}</h3>
+                          {course === 'pygame' && (
+                            <span className="inline-block text-xs px-2 py-1 rounded bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 mb-2">
+                              {getPhaseName(course, classItem.id)}
+                            </span>
+                          )}
                           <p className="text-gray-600 dark:text-gray-300">
                             {classItem.description}
                           </p>
@@ -365,7 +492,8 @@ const LevelPage = ({ course, level, levelName }: LevelPageProps) => {
                           {classItem.type === 'video' && <Video className="w-4 h-4" />}
                           {classItem.type === 'taller' && <FileText className="w-4 h-4" />}
                           {classItem.type === 'proyecto' && <Target className="w-4 h-4" />}
-                          {classItem.type.charAt(0).toUpperCase() + classItem.type.slice(1)}
+                          {classItem.type === 'taller' ? 'Taller práctico' : 'Proyecto'}
+                           
                         </span>
 
                         {classItem.status === 'completed' && (
@@ -391,7 +519,7 @@ const LevelPage = ({ course, level, levelName }: LevelPageProps) => {
                                 className="inline-flex items-center gap-2 px-3 py-1.5 text-sm rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 hover:bg-blue-500/20 transition"
                               >
                                 <Download className="w-4 h-4" />
-                                Proyecto
+                                Proyecto Final
                               </a>
                             )}
                           </div>
@@ -412,7 +540,7 @@ const LevelPage = ({ course, level, levelName }: LevelPageProps) => {
                       }`}
                       disabled={classItem.status === 'locked'}
                     >
-                      {classItem.status === 'completed' && 'Ver nuevamente'}
+                      {classItem.status === 'completed' && 'Repasar clase'}
                       {classItem.status === 'current' && 'Comenzar clase'}
                       {classItem.status === 'locked' && 'Bloqueado'}
                     </button>
@@ -422,172 +550,19 @@ const LevelPage = ({ course, level, levelName }: LevelPageProps) => {
             </div>
           </div>
 
-          {/* Sidebar - Class Details */}
-          <div className="space-y-6">
-            {/* Current Class Preview */}
-            <div className="relative rounded-xl border border-blue-500/40 bg-white/80 dark:bg-[#181a2a]/80 p-6">
-              <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-                <PlayCircle className="w-6 h-6 text-blue-500" />
-                Clase Actual
-              </h3>
-              
-              <div className="space-y-4">
-                <div className="aspect-video bg-gray-900 rounded-lg flex items-center justify-center">
-                  <div className="text-center">
-                    <PlayCircle className="w-16 h-16 text-white/50 mx-auto mb-4" />
-                    <p className="text-white/70">Video de la clase {activeClass}</p>
-                  </div>
-                </div>
-                
-                <div>
-                  <h4 className="font-bold text-lg mb-2">{classes[activeClass - 1]?.title}</h4>
-                  <p className="text-gray-600 dark:text-gray-300 mb-4">
-                    {classes[activeClass - 1]?.description}
-                  </p>
-                  
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-gray-500">Duración</span>
-                      <span className="font-medium">{classes[activeClass - 1]?.duration}</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-gray-500">Tipo</span>
-                      <span className="font-medium">{classes[activeClass - 1]?.type}</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-gray-500">Puntos</span>
-                      <span className="font-medium text-yellow-600 dark:text-yellow-400">
-                        {classes[activeClass - 1]?.points} pts
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Level Stats */}
-            <div className="relative rounded-xl border border-blue-500/40 bg-white/80 dark:bg-[#181a2a]/80 p-6">
-              <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-                <BarChart3 className="w-6 h-6 text-purple-500" />
-                Estadísticas
-              </h3>
-              
-              <div className="space-y-4">
-                <div>
-                  <div className="flex justify-between mb-1">
-                    <span>Videos completados</span>
-                    <span className="font-medium">
-                      {classes.filter(c => c.type === 'video' && c.status === 'completed').length}/8
-                    </span>
-                  </div>
-                  <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                    <div className="h-full bg-blue-500 rounded-full" style={{ width: '75%' }} />
-                  </div>
-                </div>
-                
-                <div>
-                  <div className="flex justify-between mb-1">
-                    <span>Talleres completados</span>
-                    <span className="font-medium">
-                      {classes.filter(c => c.type === 'taller' && c.status === 'completed').length}/8
-                    </span>
-                  </div>
-                  <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                    <div className="h-full bg-purple-500 rounded-full" style={{ width: '50%' }} />
-                  </div>
-                </div>
-                
-                <div>
-                  <div className="flex justify-between mb-1">
-                    <span>Proyectos completados</span>
-                    <span className="font-medium">
-                      {classes.filter(c => c.type === 'proyecto' && c.status === 'completed').length}/4
-                    </span>
-                  </div>
-                  <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                    <div className="h-full bg-green-500 rounded-full" style={{ width: '25%' }} />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Next Level Requirements */}
-            <div className="relative rounded-xl border border-blue-500/40 bg-white/80 dark:bg-[#181a2a]/80 p-6">
-              <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-                <Award className="w-6 h-6 text-yellow-500" />
-                Siguiente Nivel
-              </h3>
-              
-              <div className="space-y-3">
-                <p className="text-gray-600 dark:text-gray-300">
-                  Para desbloquear el nivel {level + 1}, necesitas:
-                </p>
-                
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="flex items-center gap-2">
-                      <CheckCircle className={`w-4 h-4 ${
-                        completedClasses >= 20 ? 'text-green-500' : 'text-gray-400'
-                      }`} />
-                      Completar 20 clases
-                    </span>
-                    <span className={completedClasses >= 20 ? 'text-green-500 font-medium' : ''}>
-                      {completedClasses}/20
-                    </span>
-                  </div>
-                  
-                  <div className="flex items-center justify-between">
-                    <span className="flex items-center gap-2">
-                      <CheckCircle className={`w-4 h-4 ${
-                        totalPoints >= 600 ? 'text-green-500' : 'text-gray-400'
-                      }`} />
-                      600 puntos mínimos
-                    </span>
-                    <span className={totalPoints >= 600 ? 'text-green-500 font-medium' : ''}>
-                      {totalPoints}/600
-                    </span>
-                  </div>
-                  
-                  <div className="flex items-center justify-between">
-                    <span className="flex items-center gap-2">
-                      <CheckCircle className={`w-4 h-4 ${
-                        classes.filter(c => c.type === 'proyecto' && c.status === 'completed').length >= 4 
-                          ? 'text-green-500' 
-                          : 'text-gray-400'
-                      }`} />
-                      4 proyectos finales
-                    </span>
-                    <span className={
-                      classes.filter(c => c.type === 'proyecto' && c.status === 'completed').length >= 4 
-                        ? 'text-green-500 font-medium' 
-                        : ''
-                    }>
-                      {classes.filter(c => c.type === 'proyecto' && c.status === 'completed').length}/4
-                    </span>
-                  </div>
-                </div>
-                
-                {completedClasses >= 20 && totalPoints >= 600 && (
-                  <button className="w-full mt-4 py-3 bg-gradient-to-r from-green-500 to-blue-500 text-white rounded-lg font-medium hover:opacity-90 transition">
-                    ¡Desbloquear Nivel {level + 1}!
-                  </button>
-                )}
-              </div>
-            </div>
-          </div>
         </div>
 
         {/* Navigation */}
         <div className="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
           <div className="flex justify-between">
-            {level > 1 && (
+            {course !== 'pygame' && level > 1 && (
               <button className="flex items-center gap-2 px-6 py-3 rounded-lg border border-blue-500/20 hover:bg-blue-500/10 transition">
                 <ChevronLeft className="w-5 h-5" />
                 Nivel {level - 1}
               </button>
             )}
             
-            {level < currentCourse.totalLevels && (
+            {course !== 'pygame' && level < currentCourse.totalLevels && (
               <button 
                 className={`flex items-center gap-2 px-6 py-3 rounded-lg font-medium ${
                   completedClasses >= 20 && totalPoints >= 600

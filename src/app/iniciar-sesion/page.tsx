@@ -332,7 +332,7 @@ const IniciarSesion = () => {
                   )}
                 </div>
 
-                {/* Recordar y olvidé contraseña */}
+                {/* Recordar y olvidé contraseña 
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0">
                   <label className="flex items-center gap-2 cursor-pointer">
                     <input
@@ -352,7 +352,7 @@ const IniciarSesion = () => {
                   >
                     <span>🔑</span> ¿Olvidaste la Contraseña?
                   </Link>
-                </div>
+                </div>*/}
 
                 {/* Botón de submit */}
                 <button
@@ -374,7 +374,7 @@ const IniciarSesion = () => {
                 </button>
               </form>
 
-              {/* Registro */}
+              {/* Registro 
               <p className="mt-6 text-center text-sm sm:text-lg text-gray-600 dark:text-gray-400">
                 🌟 ¿Nuevo por aquí?{" "}
                 <Link
@@ -383,7 +383,7 @@ const IniciarSesion = () => {
                 >
                   ¡Crea tu cuenta! 🦸
                 </Link>
-              </p>
+              </p>*/}
 
               {/* Credenciales de demo para móvil */}
               <div className="mt-6 sm:mt-8 p-3 sm:p-4 bg-gradient-to-r from-yellow-100 to-orange-100 dark:from-yellow-900/30 dark:to-orange-900/30 rounded-xl sm:rounded-2xl border-2 border-yellow-300 block lg:hidden">

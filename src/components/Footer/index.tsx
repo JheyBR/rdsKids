@@ -202,8 +202,8 @@
             </div>
 
             <div className="h-px w-full bg-linear-to-r from-transparent via-[#D2D8E183] to-transparent dark:via-[#959CB183]"></div>
-            <div className="py-8">
-              <p className="text-xs text-center text-base text-body-color dark:text-white">
+            <div className="text-center py-8">
+              <p className="text-xs text-center  text-body-color dark:text-white">
                 Desarrollado por 
                 <a
                   href="/"
@@ -222,8 +222,8 @@
                 >
                   Reliable Development Software - 2026
                 </a>
-                <p>Plataforma educativa RDS Kids para niños y jóvenes. Todos los derechos reservados.</p>
               </p>
+              <p className="text-xs">Plataforma educativa RDS Kids para niños y jóvenes. Todos los derechos reservados.</p>
             </div>
           </div>
           <div className="absolute right-0 top-14 z-[-1]">

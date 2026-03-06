@@ -1,5 +1,4 @@
 // src/components/Header/menuData.tsx
-
 import { Menu } from "@/types/menu";
 
 const menuData: Menu[] = [
@@ -15,7 +14,5 @@ const menuData: Menu[] = [
     path: "/iniciar-sesion",
     newTab: false,
   },
-  
-   
 ];
 export default menuData;

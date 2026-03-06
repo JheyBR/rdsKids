@@ -6,6 +6,7 @@ import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from 'next/link';
+import LogoOficialSigla from "@/components/Componentes/LogoOficialSigla";
 import {
   Gamepad2,
   Code,
@@ -55,6 +56,7 @@ const RDSKidsEducation = () => {
       }));
     }
   }, []);
+
 
   
   // Función de logout CORREGIDA
@@ -169,7 +171,9 @@ const RDSKidsEducation = () => {
 
 
    useEffect(() => setMounted(true), []);
-  const currentTheme = mounted ? theme : "dark";
+    const currentTheme = mounted ? theme : "dark";
+    const color2 = currentTheme === "dark" ? "#ffffff" : "#0400FD";
+    const color3 = currentTheme === "dark" ? "#ffffff" : "#103E94";
 
   const titleClass = currentTheme === "dark"
     ? "text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-300"
@@ -182,22 +186,19 @@ const RDSKidsEducation = () => {
         {/* Header con botón de logout - NUEVO */}
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-3xl font-bold">¡Bienvenido, {studentData.name}! 🎮</h1>
+            <h1 className="text-3xl font-bold"></h1>
           </div>
           
         </div>
 
         {/* Header Section */}
         <div className="mb-16 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            Sistema Educativo
-            <br />
-            <span className={titleClass}>RDS Kids</span>
-          </h2>
           
-          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-            Aprende programación de manera estructurada. Cada curso tiene clases organizadas en diferentes niveles.
-          </p>
+          <h2 className="text-3xl md:text-4xl font-bold mb-6">
+            🎮 ¡Hola, 
+           
+            <span className={titleClass}> {studentData.name}! </span>
+          </h2>
         </div>
 
         {/* Banner Header */}
@@ -211,14 +212,31 @@ const RDSKidsEducation = () => {
             priority
           />
           <div className="absolute inset-0 flex items-center justify-center px-6 text-center">
-            <div>
-              <h2 className="text-white font-bold text-2xl md:text-3xl mb-2">
-                ¡Bienvenido al Futuro del Aprendizaje!
-              </h2>
-              <p className="text-blue-200 text-lg">
-                Cada paso cuenta. Cada código enseña.
-              </p>
+            <div className="grid grid-cols-2 justify-center-safe items-center gap-4">
+              
+              <div className="ml-60 mt-[-50px] top-[-10px] left-1/2 transform -translate-x-1/2 w-[200px] sm:w-[250px] h-auto">
+                <div className="relative z-10">
+                  <LogoOficialSigla color2={color2} color3={color3} />
+                </div>
+                <Image
+                  src="/images/kids.png"
+                  alt="RDS Kids Logo"
+                  width={400}
+                  height={200}
+                  className="absolute top-[40px] left-1/2 -translate-x-1/2 w-[120px] sm:w-[130px] z-20"
+                  priority
+                />
+              </div>
+              <div>
+                <h2 className="text-white font-bold text-2xl md:text-3xl mb-2">
+                  ¡Bienvenido a tu mundo, donde tu imaginación se hace codigo!
+                </h2>
+                <p className="text-blue-200 text-lg">
+                  Cada paso cuenta. Cada código enseña.
+                </p>
+              </div>
             </div>
+              
           </div>
         </div>
 
@@ -260,7 +278,7 @@ const RDSKidsEducation = () => {
                     </div>
                   </div>
                   
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 gap-3">
                     
                     <div className="text-center p-3 rounded-lg bg-purple-500/5">
                       <p className="text-2xl font-bold">{studentData.totalClasses}</p>

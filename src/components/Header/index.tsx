@@ -5,21 +5,29 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import ThemeToggler from "./ThemeToggler";
 import menuData from "./menuData";
-  import LogoOficial from "../Componentes/LogoOficial";
-import { useTheme } from "next-themes"; // Importamos el hook useTheme para manejar el tema (oscuro o claro)
+import LogoOficial from "../Componentes/LogoOficial";
+import { useTheme } from "next-themes";
+import { LogOut, User } from "lucide-react";
 
 const Header = () => {
-
   const [mounted, setMounted] = useState(false);
-   const { theme } = useTheme(); // detecta si es dark o light
-    
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userName, setUserName] = useState("");
+  const { theme } = useTheme();
+  const pathname = usePathname();
+  
   useEffect(() => {
     setMounted(true);
-  }, []);
+    // Verificar si el usuario está autenticado
+    const auth = localStorage.getItem("isAuthenticated") === "true";
+    const name = localStorage.getItem("userName") || "";
+    setIsAuthenticated(auth);
+    setUserName(name);
+  }, [pathname]);
 
-   const currentTheme = mounted ? theme : "dark";
-   const color2 = currentTheme === "dark" ? "#ffffff" : "#0400FD";
-   const color3 = currentTheme === "dark" ? "#ffffff" : "#103E94";
+  const currentTheme = mounted ? theme : "dark";
+  const color2 = currentTheme === "dark" ? "#ffffff" : "#0400FD";
+  const color3 = currentTheme === "dark" ? "#ffffff" : "#103E94";
 
   // Navbar toggle
   const [navbarOpen, setNavbarOpen] = useState(false);
@@ -36,9 +44,11 @@ const Header = () => {
       setSticky(false);
     }
   };
+  
   useEffect(() => {
     window.addEventListener("scroll", handleStickyNavbar);
-  });
+    return () => window.removeEventListener("scroll", handleStickyNavbar);
+  }, []);
 
   // submenu handler
   const [openIndex, setOpenIndex] = useState(-1);
@@ -50,7 +60,16 @@ const Header = () => {
     }
   };
 
-  const usePathName = usePathname();
+  const handleLogout = () => {
+    localStorage.removeItem("isAuthenticated");
+    localStorage.removeItem("userEmail");
+    localStorage.removeItem("userName");
+    setIsAuthenticated(false);
+    window.location.href = "/";
+  };
+
+  // Determinar si estamos en el dashboard
+  const isDashboard = pathname?.includes("/rdsKids");
 
   return (
     <>
@@ -64,15 +83,16 @@ const Header = () => {
         <div className="container">
           <div className="relative -mx-4 flex items-center justify-between">
             <div className="w-35 max-w-full px-4 xl:mr-12">
-                <Link
-                  href="/"
-                  className={`header-logo block w-full ${
-                    sticky ? "py-1 lg:py-1" : "py-1"
-                  } `}
-                >
-                  <LogoOficial color2={color2} color3={color3}  />
-                </Link>
+              <Link
+                href="/"
+                className={`header-logo block w-full ${
+                  sticky ? "py-1 lg:py-1" : "py-1"
+                } `}
+              >
+                <LogoOficial color2={color2} color3={color3} />
+              </Link>
             </div>
+            
             <div className="flex w-full justify-end px-4">
               <div>
                 <button
@@ -97,6 +117,7 @@ const Header = () => {
                     }`}
                   />
                 </button>
+                
                 <nav
                   id="navbarCollapse"
                   className={`navbar border-body-color/50 dark:border-body-color/20 dark:bg-dark absolute right-0 z-30 w-[250px] rounded border-[.5px] bg-white px-6 py-4 duration-300 lg:visible lg:static lg:w-auto lg:border-none lg:!bg-transparent lg:p-0 lg:opacity-100 ${
@@ -106,71 +127,102 @@ const Header = () => {
                   }`}
                 >
                   <ul className="block lg:flex lg:space-x-12">
-                    {menuData.map((menuItem, index) => (
-                      <li key={index} className="group relative">
-                        {menuItem.path ? (
-                          <Link
-                            href={menuItem.path}
-                            className={`flex py-2 text-sm lg:mr-0 lg:inline-flex lg:px-0 lg:py-6 ${
-                              usePathName === menuItem.path
-                                ? "text-primary dark:text-white"
-                                : "text-dark hover:text-primary dark:text-white/70 dark:hover:text-white"
-                            }`}
-                          >
-                            {menuItem.title}
-                          </Link>
-                        ) : (
-                          <>
-                            <p
-                              onClick={() => handleSubmenu(index)}
-                              className="text-dark group-hover:text-primary flex cursor-pointer items-center justify-between py-2 text-base lg:mr-0 lg:inline-flex lg:px-0 lg:py-6 dark:text-white/70 dark:group-hover:text-white"
-                            >
-                              {menuItem.title}
-                              <span className="pl-3">
-                                <svg width="25" height="24" viewBox="0 0 25 24">
-                                  <path
-                                    fillRule="evenodd"
-                                    clipRule="evenodd"
-                                    d="M6.29289 8.8427C6.68342 8.45217 7.31658 8.45217 7.70711 8.8427L12 13.1356L16.2929 8.8427C16.6834 8.45217 17.3166 8.45217 17.7071 8.8427C18.0976 9.23322 18.0976 9.86639 17.7071 10.2569L12 15.964L6.29289 10.2569C5.90237 9.86639 5.90237 9.23322 6.29289 8.8427Z"
-                                    fill="currentColor"
-                                  />
-                                </svg>
-                              </span>
-                            </p>
-                            <div
-                              className={`submenu dark:bg-dark relative top-full left-0 rounded-sm bg-white transition-[top] duration-300 group-hover:opacity-100 lg:invisible lg:absolute lg:top-[110%] lg:block lg:w-[250px] lg:p-4 lg:opacity-0 lg:shadow-lg lg:group-hover:visible lg:group-hover:top-full ${
-                                openIndex === index ? "block" : "hidden"
+                    {menuData.map((menuItem, index) => {
+                      // No mostrar "Iniciar Sesión" si ya está autenticado
+                      if (menuItem.title === "Iniciar Sesión" && isAuthenticated) {
+                        return null;
+                      }
+                      
+                      return (
+                        <li key={index} className="group relative">
+                          {menuItem.path ? (
+                            <Link
+                              href={menuItem.path}
+                              className={`flex py-2 text-sm lg:mr-0 lg:inline-flex lg:px-0 lg:py-6 ${
+                                pathname === menuItem.path
+                                  ? "text-primary dark:text-white"
+                                  : "text-dark hover:text-primary dark:text-white/70 dark:hover:text-white"
                               }`}
                             >
-                              {menuItem.submenu.map((submenuItem, index) => (
-                                <Link
-                                  href={submenuItem.path}
-                                  key={index}
-                                  className="text-dark hover:text-primary block rounded-sm py-2.5 text-sm lg:px-3 dark:text-white/70 dark:hover:text-white"
-                                >
-                                  {submenuItem.title}
-                                </Link>
-                              ))}
-                            </div>
-                          </>
+                              {menuItem.title}
+                            </Link>
+                          ) : (
+                            <>
+                              <p
+                                onClick={() => handleSubmenu(index)}
+                                className="text-dark group-hover:text-primary flex cursor-pointer items-center justify-between py-2 text-base lg:mr-0 lg:inline-flex lg:px-0 lg:py-6 dark:text-white/70 dark:group-hover:text-white"
+                              >
+                                {menuItem.title}
+                                <span className="pl-3">
+                                  <svg width="25" height="24" viewBox="0 0 25 24">
+                                    <path
+                                      fillRule="evenodd"
+                                      clipRule="evenodd"
+                                      d="M6.29289 8.8427C6.68342 8.45217 7.31658 8.45217 7.70711 8.8427L12 13.1356L16.2929 8.8427C16.6834 8.45217 17.3166 8.45217 17.7071 8.8427C18.0976 9.23322 18.0976 9.86639 17.7071 10.2569L12 15.964L6.29289 10.2569C5.90237 9.86639 5.90237 9.23322 6.29289 8.8427Z"
+                                      fill="currentColor"
+                                    />
+                                  </svg>
+                                </span>
+                              </p>
+                              <div
+                                className={`submenu dark:bg-dark relative top-full left-0 rounded-sm bg-white transition-[top] duration-300 group-hover:opacity-100 lg:invisible lg:absolute lg:top-[110%] lg:block lg:w-[250px] lg:p-4 lg:opacity-0 lg:shadow-lg lg:group-hover:visible lg:group-hover:top-full ${
+                                  openIndex === index ? "block" : "hidden"
+                                }`}
+                              >
+                                {menuItem.submenu.map((submenuItem, index) => (
+                                  <Link
+                                    href={submenuItem.path}
+                                    key={index}
+                                    className="text-dark hover:text-primary block rounded-sm py-2.5 text-sm lg:px-3 dark:text-white/70 dark:hover:text-white"
+                                  >
+                                    {submenuItem.title}
+                                  </Link>
+                                ))}
+                              </div>
+                            </>
+                          )}
+                        </li>
+                      );
+                    })}
+                    
+                    {/* Mostrar opción de Cerrar Sesión si está autenticado */}
+                    {isAuthenticated && (
+                      <>
+                        {/* Mostrar nombre de usuario en desktop */}
+                        {!isDashboard && (
+                          <li className="hidden lg:flex items-center text-sm text-gray-600 dark:text-gray-300">
+                            <User className="w-4 h-4 mr-1" />
+                            {userName || "Usuario"}
+                          </li>
                         )}
-                      </li>
-                    ))}
+                        
+                        <li className="group relative">
+                          <button
+                            onClick={handleLogout}
+                            className="flex items-center gap-2 py-2 text-sm lg:mr-0 lg:inline-flex lg:px-0 lg:py-6 text-red-500 hover:text-red-600 dark:text-red-400 font-medium cursor-pointer transition-all duration-300 hover:scale-105"
+                          >
+                            <LogOut className="w-4 h-4" />
+                            <span>Cerrar Sesión</span>
+                          </button>
+                        </li>
+                      </>
+                    )}
                   </ul>
                 </nav>
               </div>
+              
               <div className="flex items-center justify-end pr-16 lg:pr-0">
-                {/*<Link
-                  href="/signin"
-                  className="text-dark hidden px-7 py-3 text-sm font-medium hover:opacity-70 md:block dark:text-white"
-                >
-                  Ingresar
-                </Link>
-                <Link
-                  href="/signup"
-                  className="ease-in-up shadow-btn hover:shadow-btn-hover bg-azulrds1 hover:bg-primary/40 hidden rounded-xl px-8 py-3 text-sm font-medium text-white transition duration-300 md:block md:px-9 lg:px-6 xl:px-9"
-                >Registrate
-                </Link>*/}
+                {/* Botón de Cerrar Sesión para móvil (alternativo) */}
+                {isAuthenticated && isDashboard && (
+                  <button
+                    onClick={handleLogout}
+                    className="lg:hidden mr-3 p-2 text-red-500 hover:text-red-600 dark:text-red-400 cursor-pointer transition-all duration-300 hover:scale-110 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-full"
+                    aria-label="Cerrar sesión"
+                  >
+                    <LogOut className="w-5 h-5" />
+                  </button>
+                )}
+                
                 <div>
                   <div></div>
                   {/*<ThemeToggler />*/}
