@@ -378,23 +378,7 @@ const IniciarSesion = () => {
                 </Link>
               </p>*/}
 
-              {/* Credenciales de demo para móvil */}
-              <div className="mt-6 sm:mt-8 p-3 sm:p-4 bg-gradient-to-r from-yellow-100 to-orange-100 dark:from-yellow-900/30 dark:to-orange-900/30 rounded-xl sm:rounded-2xl border-2 border-yellow-300 block lg:hidden">
-                <p className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
-                  <span className="text-xl sm:text-2xl">🎪</span>
-                  <strong>Zona de prueba:</strong>
-                </p>
-                <div className="grid grid-cols-2 gap-2 text-xs">
-                  <div className="bg-white/50 dark:bg-gray-800/50 p-2 rounded-lg">
-                    <span className="block text-xs text-gray-500">Usuario:</span>
-                    <span className="font-mono text-xs break-all">estudiante@rdskids.com</span>
-                  </div>
-                  <div className="bg-white/50 dark:bg-gray-800/50 p-2 rounded-lg">
-                    <span className="block text-xs text-gray-500">Contraseña:</span>
-                    <span className="font-mono text-xs">rds123</span>
-                  </div>
-                </div>
-              </div>
+              
             </div>
           </div>
         </div>
