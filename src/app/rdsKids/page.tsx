@@ -245,36 +245,45 @@ totalLessons:60
             priority
           />
           
-            <div className="absolute inset-0 flex items-center justify-center px-6 text-center">
+<div className="absolute inset-0 flex items-center justify-center px-6 text-center">
+  {/* Logo Container - Corregido para ser responsive */}
+  <div className="flex flex-col lg:flex-row items-center justify-center gap-4 w-full max-w-5xl mx-auto">
+    
+    {/* Logo - Ahora responsive sin ml-60 fijo */}
+    <div className="relative w-[180px] sm:w-[200px] md:w-[220px] lg:w-[250px] h-auto mt-0 lg:mt-0">
+      <div className="relative z-10">
+        <LogoOficialSigla color2={color2} color3={color3} />
+      </div>
+      <Image
+        src="/images/kids.png"
+        alt="RDS Kids Logo"
+        width={400}
+        height={200}
+        className="absolute top-[45%] left-1/2 -translate-x-1/2 w-[100px] sm:w-[110px] md:w-[120px] lg:w-[130px] z-20"
+        priority
+      />
+    </div>
 
-              {/* LOGO - SIEMPRE VISIBLE */}
-              <div className="ml-60 mt-[-50px] top-[-10px] left-1/2 transform -translate-x-1/2 w-[200px] sm:w-[250px] h-auto">
-                <div className="relative z-10">
-                  <LogoOficialSigla color2={color2} color3={color3} />
-                </div>
-                <Image
-                  src="/images/kids.png"
-                  alt="RDS Kids Logo"
-                  width={400}
-                  height={200}
-                  className="absolute top-[40px] left-1/2 -translate-x-1/2 w-[120px] sm:w-[130px] z-20"
-                  priority
-                />
-              </div>
+    {/* Texto - Visible solo en desktop (lg) */}
+    <div className="hidden lg:flex items-center justify-center flex-1">
+      <div className="text-center lg:text-left">
+        <h2 className="text-white font-bold text-2xl md:text-3xl mb-2">
+          ¡Bienvenido a tu mundo, donde tu imaginación se hace código!
+        </h2>
+        <p className="text-blue-200 text-lg">
+          Cada paso cuenta. Cada código enseña.
+        </p>
+      </div>
+    </div>
 
-              {/* TEXTO - SOLO DESKTOP */}
-              <div className="hidden md:flex items-center justify-center">
-                <div className="ml-10">
-                  <h2 className="text-white font-bold text-2xl md:text-3xl mb-2">
-                    ¡Bienvenido a tu mundo, donde tu imaginación se hace código!
-                  </h2>
-                  <p className="text-blue-200 text-lg">
-                    Cada paso cuenta. Cada código enseña.
-                  </p>
-                </div>
-              </div>
-
-            </div>
+    {/* Texto simplificado para móvil (opcional) */}
+    <div className="block lg:hidden text-center mt-2">
+      <p className="text-white text-sm font-medium">
+        🎮 Aprende programación jugando
+      </p>
+    </div>
+  </div>
+</div>
           
         </div>
 

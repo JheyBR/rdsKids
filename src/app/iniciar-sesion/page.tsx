@@ -174,7 +174,7 @@ const IniciarSesion = () => {
       <div className="relative z-10 flex items-center justify-center min-h-screen px-4 py-8">
         <div className="w-full max-w-6xl grid lg:grid-cols-2 gap-8 items-center">
           
-          {/* Lado izquierdo - Zona de juegos/logo - AHORA VISIBLE EN MÓVIL */}
+          
           <div className="block lg:hidden w-full mb-6">
             {/* Logo responsive para móvil */}
             <div className="relative h-[200px] w-full max-w-[400px] mx-auto">
@@ -226,16 +226,9 @@ const IniciarSesion = () => {
                   priority
                 />
               </div>
-
-              {/* Nubes decorativas */}
-              <div className="absolute -bottom-10 left-0 w-full">
-                <svg viewBox="0 0 1440 320" className="w-full">
-                  <path fill="rgba(255,255,255,0.3)" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,154.7C960,171,1056,181,1152,170.7C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
-                </svg>
-              </div>
             </div>
 
-            <div className="mt-8 text-center bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 border-2 border-blue-300 dark:border-blue-700">
+            <div className="text-center bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 border-2 border-blue-300 dark:border-blue-700">
               <h2 className="text-3xl font-bold mb-2 bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text">
                 ¡Aprende jugando!
               </h2>
@@ -407,29 +400,6 @@ const IniciarSesion = () => {
         </div>
       </div>
 
-      <style jsx>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-20px); }
-        }
-        @keyframes spin-slow {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-        @keyframes twinkle {
-          0%, 100% { opacity: 0.3; }
-          50% { opacity: 1; }
-        }
-        .animate-float {
-          animation: float 3s ease-in-out infinite;
-        }
-        .animate-spin-slow {
-          animation: spin-slow 8s linear infinite;
-        }
-        .animate-twinkle {
-          animation: twinkle 2s ease-in-out infinite;
-        }
-      `}</style>
     </div>
   );
 };
